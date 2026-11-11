@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Preparing your certificate";
+
+    var reference = ViewBag.Reference as string ?? "";
+    var message = ViewBag.Message as string ?? "Your policy is being created. Please wait up to 5 minutes.";
+    var subMessage = ViewBag.SubMessage as string ?? "Your certificate will be sent to your email once ready.";
+
+    var refreshSeconds = 10;
+}
+
+@if (!string.IsNullOrWhiteSpace(reference))
+{
+    <meta http-equiv="refresh" content="@refreshSeconds;url=/policy/invoicecallback?reference=@Uri.EscapeDataString(reference)" />
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm" style="max-width: 620px; width: 100%;">
+        <div class="card-body text-center p-4">
+
+            <div class="mb-3" style="font-size: 3rem;">⏳</div>
+
+            <h4 class="mb-2">Processing your policy</h4>
+
+            <p class="text-muted mb-2">@message</p>
+            <p class="text-muted mb-3"><strong>@subMessage</strong></p>
+
+            @if (!string.IsNullOrWhiteSpace(reference))
+            {
+                <div class="alert alert-light border text-start mt-3">
+                    <div><strong>Reference:</strong> @reference</div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+                <div class="spinner-border" role="status" aria-label="loading"></div>
+
+            </div>
+
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(reference))
+        {
+            <a class="btn btn-primary mt-3"
+               href="/policy/invoicecallback?reference=@Uri.EscapeDataString(reference)">
+                Refresh now
+            </a>
+        }
+
+        <div class="mt-4">
+            <a class="btn btn-outline-secondary" href="/">
+                Go to homepage
+            </a>
+        </div>
+
+        <p class="text-muted mt-3 mb-0" style="font-size: 0.9rem;">
+            If this takes longer than expected, please keep this page open or check your email later.
+        </p>
+    </div>
+</div>
+</div>

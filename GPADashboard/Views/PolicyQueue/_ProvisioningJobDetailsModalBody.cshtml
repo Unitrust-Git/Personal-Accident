@@ -1,0 +1,18 @@
+﻿@model PolicyProvisioningJobDto
+@using GPA.Application.DTO
+@using GPA.Core.Models.Policy
+
+<table class="table table-sm table-bordered mb-0">
+    <tr><th style="width:35%">Id</th><td>@Model.Id</td></tr>
+    <tr><th>PaymentTransactionId</th><td style="word-break:break-all">@Model.PaymentTransactionId</td></tr>
+    <tr><th>PaymentType</th><td>@Model.PaymentType</td></tr>
+    <tr><th>Status</th><td>@Model.Status</td></tr>
+    <tr><th>AttemptCount</th><td>@Model.AttemptCount</td></tr>
+    <tr><th>NextAttemptAt (UTC)</th><td>@Model.NextAttemptAt.ToString("yyyy-MM-dd HH:mm:ss")</td></tr>
+    <tr><th>LastAttemptAt (UTC)</th><td>@(Model.LastAttemptAt?.ToString("yyyy-MM-dd HH:mm:ss") ?? "-")</td></tr>
+    <tr><th>UpdatedAt (UTC)</th><td>@Model.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td></tr>
+    <tr>
+        <th>LastError</th>
+        <td style="white-space:pre-wrap">@((Model.LastError ?? "-"))</td>
+    </tr>
+</table>

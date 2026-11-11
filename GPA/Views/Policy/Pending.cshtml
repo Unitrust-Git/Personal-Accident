@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Policy Payment Pending";
+
+    var reference = ViewBag.Reference as string ?? "";
+    var checkStatusUrl = ViewBag.CheckStatusUrl as string ?? "";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm" style="max-width: 520px; width: 100%;">
+        <div class="card-body text-center p-4">
+
+            <div class="mb-3" style="font-size: 3rem;">⏳</div>
+
+            <h4 class="mb-2">Payment Pending</h4>
+
+            <p class="text-muted">
+                Your payment is still being processed.
+                This can happen due to bank delays or network issues.
+            </p>
+
+            <p class="text-muted">
+                <strong>
+                    Once payment is completed successfully, your policy document
+                    will be generated and sent directly to your email address.
+                </strong>
+            </p>
+
+            <div class="alert alert-info py-2" role="alert">
+                We’ll check automatically in <span id="countdown">8</span>s…
+            </div>
+
+            <a href="@checkStatusUrl"
+               class="btn btn-primary btn-lg w-100 mb-3"
+               id="btnCheck">
+                Check Payment Status
+            </a>
+
+            <a href="/" class="btn btn-outline-secondary w-100">
+                Go Home
+            </a>
+
+            <hr />
+
+            <p class="small text-muted mb-1">Transaction Reference</p>
+            <p class="fw-semibold">@reference</p>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const statusUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(checkStatusUrl));
+      const reference = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(reference));
+      const countdownEl = document.getElementById("countdown");
+
+      if (!statusUrl || !countdownEl) return;
+
+      const intervalSeconds = 8;
+      let seconds = intervalSeconds;
+      let timerId = null;
+
+      async function check() {
+        try {
+          const res = await fetch(statusUrl, { cache: "no-store" });
+          if (!res.ok) throw new Error("Status endpoint returned " + res.status);
+
+          const data = await res.json();
+
+          if (data?.state === "ready" && data.redirectUrl) {
+            window.location.href = data.redirectUrl; 
+            return;
+          }
+
+          if (data?.state === "failed") {
+            window.location.href =
+              "/policy/failed?reason=failed&reference=" + encodeURIComponent(reference || "");
+            return;
+          }
+        } catch (e) {
+          console.warn("Status check failed", e);
+        }
+
+        // restart countdown
+        seconds = intervalSeconds;
+        startCountdown();
+      }
+
+      function startCountdown() {
+        // clear any existing timer
+        if (timerId) clearTimeout(timerId);
+
+        countdownEl.textContent = seconds;
+
+        timerId = setTimeout(async () => {
+          seconds--;
+
+          if (seconds <= 0) {
+            await check();
+            return;
+          }
+
+          startCountdown();
+        }, 1000);
+      }
+
+      startCountdown();
+    });
+</script>
+
+
+

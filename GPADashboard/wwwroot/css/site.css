@@ -1,0 +1,374 @@
+    html {
+        font-size: 14px;
+    }
+    /*Pagination*/
+    .pagination .page-link {
+        border-radius: 8px !important;
+        margin: 0 3px;
+    }
+
+    .pagination .page-item.active .page-link {
+        font-weight: 600;
+    }
+
+
+/* Mobile behavior */
+@media (max-width: 992px) {
+    #sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+        width: 260px; /* a bit wider on mobile */
+
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 1040;
+    }
+
+        #sidebar.show {
+            transform: translateX(0);
+        }
+
+    #content {
+        margin-left: 0;
+        width: 100%;
+        padding: 16px;
+    }
+
+    /* overlay behind sidebar */
+    .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.35);
+        z-index: 1039;
+    }
+
+        .sidebar-backdrop.show {
+            display: block;
+        }
+}
+
+    .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+        box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    }
+
+    html {
+        position: relative;
+        min-height: 100%;
+    }
+
+    body {
+        margin-bottom: 60px;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .form-card h4 {
+        color: #004085;
+        font-weight: 700;
+    }
+
+    .fade-in {
+        animation: fadeInUp 0.4s ease;
+    }
+
+    .selectable-card {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        padding: 28px;
+        border-radius: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px rgba(0,0,0,.2);
+    }
+
+    .selectable-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 18px 35px rgba(0,0,0,.35);
+    }
+
+    .form-card {
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 15px 35px rgba(0,0,0,.15);
+    }
+
+    .form-card h4 {
+        color: #004085;
+        font-weight: 700;
+    }
+
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /*
+        Individual form styles
+    */
+
+    .unit-selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .unit-selector input {
+        width: 80px;
+        text-align: center;
+        font-size: 1.4rem;
+        font-weight: 700;
+        border: none;
+        background: #f1f5ff;
+        border-radius: 12px;
+        padding: 10px;
+    }
+
+    .unit-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: none;
+        font-size: 1.5rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .unit-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    .total-box {
+        background: #e9f1ff;
+        border-radius: 14px;
+        padding: 15px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #004085;
+        text-align: center;
+    }
+
+    .fancy-btn {
+        box-shadow: 0 8px 20px rgba(0,123,255,0.4);
+    }
+
+    /* Card improvements */
+    .form-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        transition: 0.3s;
+    }
+
+    .form-card h4 {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        color: #0d6efd;
+    }
+
+    .section-title {
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        color: #6c757d;
+        margin-bottom: 10px;
+    }
+
+    /* Verified Box */
+    #companyDetails {
+        background: #f0f9ff;
+        border-left: 4px solid #0d6efd;
+        animation: fadeIn 0.6s;
+    }
+
+    /* Button style enhancement */
+    #btnVerifyCompany {
+        font-size: 0.9rem;
+        padding: 10px 0;
+        border-radius: 12px;
+    }
+
+
+    /* Fade animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    @media(max - width:576px) {
+        .form-card {
+            padding: 20px;
+            border-radius: 20px
+        }
+
+        #units {
+            width: 100% !important;
+        }
+    }
+
+
+    .beneficiary-card {
+        background: #f8f9fa;
+        transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .beneficiary-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    }
+
+
+    .beneficiary-card small {
+        font-size: 0.8rem;
+        text-align: left;
+    }
+
+    .beneficiary-card .btn-outline-secondary {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .beneficiary-card .badge {
+        font-size: 0.75rem;
+        padding: 0.3em 0.5em;
+    }
+
+
+    .beneficiary-card h6 {
+        font-size: 0.9rem;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        letter-spacing: normal;
+        text-align: left;
+        font-weight: 600;
+    }
+
+
+    .beneficiary-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 85%;
+    }
+
+
+    .beneficiary-card .name-container {
+        min-height: 2.4rem;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .modal-elegant {
+        background: #ffffff;
+        border: none;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    .modal-elegant * {
+        text-align: left;
+    }
+
+    .modal-elegant input {
+        border-radius: 12px;
+        border: 1px solid #e3e6ea;
+    }
+
+    .modal-elegant input:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.15rem rgba(13,110,253,0.15);
+        }
+
+    .unit-input {
+        width: 90px;
+        padding: 0.45rem 0.5rem;
+    }
+
+
+    .modal-footer .btn {
+        border-radius: 50px;
+        font-weight: 500;
+    }
+
+    #btnProceedToReview {
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    #btnProceedToReview:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    }
+
+    #companyDetails {
+        font-size: 0.85rem;
+    }
+
+    #companyDetails h5 {
+        font-size: 1rem;
+    }
+
+    #companyDetails strong {
+        font-size: 0.85rem;
+    }
+
+    #companyDetails div {
+        font-size: 0.85rem;
+    }
+
+    #companyDetails .badge {
+        font-size: 0.75rem;
+    }
+
+    #cacInput {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    #btnVerifyCompany {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+    }

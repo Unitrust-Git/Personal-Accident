@@ -1,0 +1,49 @@
+﻿@model GPA.Models.CertificateViewVm
+
+@{
+    Layout = "_Layout"; // or your public layout
+    ViewData["Title"] = "Policy Certificate";
+
+    var pdfUrl = Url.Action("CertificatePdf", "Policy", new { reference = Model.Reference });   
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <div>
+        <h4 class="mb-0">Policy Certificate</h4>
+        <small class="text-muted">Policy No: <strong>@Model.PolicyNumber</strong></small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm"
+           href="@pdfUrl"
+           target="_blank">
+            <i class="bi bi-box-arrow-up-right me-1"></i> Open in new tab
+        </a>
+
+        <a class="btn btn-primary btn-sm"
+           href="@pdfUrl"
+           download>
+            <i class="bi bi-download me-1"></i> Download
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-2">
+        <div class="ratio ratio-16x9" style="min-height: 75vh;">
+            <div id="pdfLoader" class="text-center py-3">
+                <div class="spinner-border text-primary"></div>
+                <div class="small mt-2">Loading certificate...</div>
+            </div>
+
+            <iframe src="@pdfUrl"
+                    onload="document.getElementById('pdfLoader').style.display='none';"
+                    style="width:100%; height:100%; border:0;">
+            </iframe>
+        </div>
+
+        <div class="mt-2 text-muted small">
+            If the PDF doesn’t show inside the page, use “Open in new tab” or “Download”.
+        </div>
+    </div>
+</div>

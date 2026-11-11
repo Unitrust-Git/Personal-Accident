@@ -1,0 +1,237 @@
+﻿@* ================= CORPORATE GPA PARTIAL VIEW ================= *@
+
+<div class="container my-4">
+
+    <!-- Progress Bar -->
+    <div class="progress mb-3" style="height: 10px;">
+        <div id="progressBar" class="progress-bar bg-primary" style="width: 40%;"></div>
+    </div>
+    <div class="text-center small fw-semibold text-primary mb-4">
+        <span id="progressStepLabel">Step 2 of 5 — Company Details</span>
+    </div>
+
+    <div class="form-card p-4 shadow rounded-4 bg-white">
+
+        <h4 class="fw-bold text-primary mb-4">Corporate GPA Insurance</h4>
+
+        <!-- COMPANY SECTION -->
+        <div id="company-section">
+            <h6 class="section-title fw-bold">Company Verification</h6>
+
+            <div class="row align-items-end mb-3">
+                <div class="col-md-8">
+                    <label class="form-label">CAC Number</label>
+                    <input id="cacInput" class="form-control form-control-lg" placeholder="e.g. RC1234567" />
+                </div>
+                <div class="col-md-4 mt-3 mt-md-0">
+                    <button type="button" id="btnVerifyCompany" class="btn btn-primary w-100 small-text-btn">
+                        Verify Company
+                    </button>
+                </div>
+            </div>
+
+            <div id="companyError" class="text-danger small d-none"></div>
+
+            <!-- VERIFIED COMPANY CARD -->
+            <div id="companyDetails" class="d-none mt-3 p-4 rounded bg-light">
+                <div class="d-flex justify-content-between">
+                    <h5 class="m-0 fw-bold">Company Verified</h5>
+                    <span class="badge bg-success">✔ Verified</span>
+                </div>
+                <hr>
+                <div class="row text-start">
+                    <div class="col-md-6">
+                        <strong class="text-muted">Name:</strong>
+                        <div id="companyName"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <strong class="text-muted">Registration:</strong>
+                        <div id="companyReg"></div>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <strong class="text-muted">Address:</strong>
+                        <div id="companyAddress"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BENEFICIARIES SECTION -->
+        <div id="beneficiaries-section" class="d-none mt-5">
+
+            <h6 class="fw-bold mb-3">Beneficiaries</h6>
+
+            <button class="btn btn-outline-primary btn-lg w-100 mb-3"
+                    data-bs-toggle="modal" data-bs-target="#beneficiaryModal">
+                + Add Beneficiary
+            </button>
+
+            <!-- CARD CONTAINER -->
+            <div id="beneficiaryCards" class="row g-3"></div>
+
+            <div class="mt-3 text-end fw-semibold">
+                Total Premium: ₦<span id="totalPremium">0</span>
+            </div>
+
+            <button id="btnProceedToReview" class="btn btn-primary btn-lg w-100 mt-3">
+                Continue → Review Summary
+            </button>
+        </div>
+
+    </div>
+</div>
+
+@* ===================== BENEFICIARY MODAL (STEPPER) ===================== *@
+<div class="modal fade" id="beneficiaryModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content p-3 rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Add Beneficiary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="step-pane" data-step="1">
+                    <h6 class="fw-bold mb-3">Beneficiary Details</h6>
+                    <input id="benName" class="form-control mb-2" placeholder="Full Name">
+                    <input id="benPhone" class="form-control" placeholder="Phone Number">
+                </div>
+
+                <div class="step-pane d-none" data-step="2">
+                    <h6 class="fw-bold mb-3">Next of Kin Information</h6>
+                    <input id="kinName" class="form-control mb-2" placeholder="Next of Kin Name">
+                    <input id="kinPhone" class="form-control" placeholder="Next of Kin Phone">
+                </div>
+
+                <div class="step-pane d-none" data-step="3">
+                    <h6 class="fw-bold mb-3">Units</h6>
+                    <input id="units" type="number" value="1" min="1" class="form-control w-25">
+                </div>
+
+            </div>
+
+            <div class="modal-footer d-flex justify-content-between border-0">
+                <button class="btn btn-outline-secondary" id="backStep">Back</button>
+                <button class="btn btn-primary" id="nextStep">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ======================= JAVASCRIPT LOGIC ======================= *@
+<script>
+    let beneficiaries = [];
+    const unitPrice = 1500;
+    let currentStep = 1;
+
+    function updateProgress(step) {
+        const steps = {2: 40, 3: 60, 4: 80};
+        $("#progressBar").css("width", steps[step] + "%");
+        $("#progressStepLabel").text(step === 2 ? "Step 2 of 5 — Company Details" :
+                                      step === 3 ? "Step 3 of 5 — Beneficiaries" :
+                                      "Step 4 of 5 — Review Summary");
+    }
+
+    $("#btnVerifyCompany").click(function () {
+        const cac = $("#cacInput").val().trim();
+        if (!cac) return $("#companyError").text("Enter CAC Number").removeClass("d-none");
+
+        $.get("@Url.Action("VerifyBusiness", "GPA")", { registrationNumber: cac })
+          .done(resp => {
+            if (!resp.success || !resp.data) return $("#companyError").text("Company not found").removeClass("d-none");
+
+            $("#companyName").text(resp.data.name);
+            $("#companyReg").text(resp.data.registrationNumber);
+            $("#companyAddress").text(resp.data.address);
+            $("#companyDetails, #beneficiaries-section").removeClass("d-none");
+
+            sessionStorage.setItem("companyData", JSON.stringify(resp.data));
+            updateProgress(3);
+        });
+    });
+
+    function renderCards() {
+        const container = $("#beneficiaryCards");
+        container.empty();
+        let total = 0;
+
+        beneficiaries.forEach((b, i) => {
+            total += b.units * unitPrice;
+            container.append(`
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm p-3 rounded-3">
+                        <h6 class="fw-bold mb-2">${b.name}</h6>
+                        <p class="mb-1"><strong>Phone:</strong> ${b.phone}</p>
+                        <p class="mb-1"><strong>NOK:</strong> ${b.kinName} (${b.kinPhone})</p>
+                        <p class="mb-1"><strong>Units:</strong>
+                            <button class="btn btn-sm btn-outline-secondary plus-unit" data-id="${i}">+</button>
+                            ${b.units}
+                            <button class="btn btn-sm btn-outline-secondary minus-unit" data-id="${i}">−</button>
+                        </p>
+                        <button class="btn btn-sm btn-danger remove" data-id="${i}">Remove</button>
+                    </div>
+                </div>
+            `);
+        });
+
+        $("#totalPremium").text(total.toLocaleString());
+    }
+
+    $(document).on("click", ".remove", function(){
+        beneficiaries.splice($(this).data("id"),1);
+        renderCards();
+    });
+
+    $(document).on("click", ".plus-unit", function(){
+        const i = $(this).data("id");
+        beneficiaries[i].units++;
+        renderCards();
+    });
+
+    $(document).on("click", ".minus-unit", function(){
+        const i = $(this).data("id");
+        if(beneficiaries[i].units>1) beneficiaries[i].units--;
+        renderCards();
+    });
+
+    $("#btnProceedToReview").click(function(){
+        if(!beneficiaries.length) return alert("Add at least 1 beneficiary");
+        sessionStorage.setItem("insuredList", JSON.stringify(beneficiaries));
+        updateProgress(4);
+        window.location.href = "/GPA/Review";
+    });
+
+    // ------------------- STEPPER LOGIC -------------------
+    function showStep(step){
+        $(".step-pane").addClass("d-none");
+        $(`.step-pane[data-step="${step}"]`).removeClass("d-none");
+        $("#backStep").toggle(step>1);
+        $("#nextStep").text(step===3?"Finish":"Next");
+    }
+
+    $("#nextStep").click(()=>{
+        if(currentStep<3){
+            currentStep++;
+            showStep(currentStep);
+        } else {
+            // Add beneficiary
+            beneficiaries.push({
+                name: $("#benName").val(),
+                phone: $("#benPhone").val(),
+                kinName: $("#kinName").val(),
+                kinPhone: $("#kinPhone").val(),
+                units: parseInt($("#units").val())
+            });
+            renderCards();
+            $("#beneficiaryModal").modal("hide");
+            currentStep = 1;
+            showStep(1);
+        }
+    });
+
+    $("#backStep").click(()=>{ if(currentStep>1){ currentStep--; showStep(currentStep);} });
+
+</script>

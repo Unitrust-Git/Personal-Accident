@@ -1,0 +1,37 @@
+﻿@model PaymentDetailsVm
+
+<div class="container-fluid">
+    <table class="table table-sm table-bordered mb-0">
+        <tr>
+            <th style="width: 35%">Reference</th>
+            <td>@Model.Payment.Reference</td>
+        </tr>
+        <tr>
+            <th>Gateway Reference</th>
+            <td>@(Model.Payment.GatewayReference ?? "-")</td>
+        </tr>
+        <tr>
+            <th>Invoice ID</th>
+            <td>@(Model.Payment.InvoiceId ?? "-")</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>
+                <span class="badge
+                    @(Model.Payment.Status == GPA.Core.Enums.PaymentStatus.Success ? "bg-success" :
+                                            Model.Payment.Status == GPA.Core.Enums.PaymentStatus.Failed ? "bg-danger" :
+                                            "bg-warning")">
+                    @Model.Payment.Status
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <th>Amount</th>
+            <td>@Model.Payment.Amount.ToString("N2")</td>
+        </tr>
+        <tr>
+            <th>Created At</th>
+            <td>@Model.Payment.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+        </tr>
+    </table>
+</div>

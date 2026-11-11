@@ -1,0 +1,170 @@
+﻿@model GPA.Models.CorporateInvoiceViewModel
+@{
+    ViewBag.Title = "Invoice - Corporate";
+}
+
+<div class="container my-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap">
+        <div class="mb-3">
+            <img src="~/img/New Unitrust Logo White 3.png" alt="Unitrust Logo" style="width:180px;">
+        </div>
+        <div class="text-end">
+            <h4 class="fw-bold">Invoice</h4>
+            <p class="text-muted mb-1">Invoice #: @Model.InvoiceId</p>
+            <p class="text-muted mb-0">Date: <strong>@DateTime.Now.ToShortDateString()</strong></p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm p-4 mb-5 border-light rounded-4">
+
+        <div class="mb-4">
+            <h5 class="text-primary fw-bold mb-1">Account Type: Corporate</h5>
+            <p class="text-muted mb-0">Please review your policy details before proceeding to payment.</p>
+        </div>
+
+        <!-- COMPANY INFO -->
+        <div class="table-responsive">
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <th class="fw-normal">Company Name</th>
+                        <td>@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-normal">Registration Number</th>
+                        <td>@Model.RegistrationNumber</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-normal">Address</th>
+                        <td>@Model.Address</td>
+                    </tr>
+                    <tr>
+                        <th class="fw-normal">Email</th>
+                        <td>@Model.Email</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table table-borderless table-sm align-middle">
+                <thead>
+                    <tr class="text-muted">
+                        <th>#</th>
+                        <th>Beneficiary Name</th>
+                        <th>Phone</th>
+                        <th>Units</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Beneficiaries != null && Model.Beneficiaries.Any())
+                    {
+                        for (int i = 0; i < Model.Beneficiaries.Count; i++)
+                        {
+                            var ben = Model.Beneficiaries[i];
+                            var subtotal = ben.Units * Model.UnitPrice;
+
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@ben.BenName</td>
+                                <td>@ben.Phone</td>
+                                <td>@ben.Units</td>
+                                <td>₦@Model.UnitPrice.ToString("N0")</td>
+                                <td>₦@subtotal.ToString("N0")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-3">No beneficiaries added.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-success text-white p-3 rounded-3 d-flex justify-content-between align-items-center mt-4">
+            <h4 class="fw-bold mb-0">Total Premium</h4>
+            <h4 class="fw-bold mb-0">
+                ₦@((Model.Beneficiaries?.Sum(b => b.Units * Model.UnitPrice) ?? 0).ToString("N0"))
+            </h4>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <button id="payInvoice" class="btn btn-success btn-lg shadow-sm">Proceed to Payment</button>
+        <a href="/Home/Index" class="btn btn-outline-secondary btn-lg shadow-sm">Back</a>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+
+            $("#payInvoice").click(async function(){
+
+                const companyData = JSON.parse(sessionStorage.getItem("companyData") || "{}");
+                const beneficiaries = JSON.parse(sessionStorage.getItem("corporateBeneficiaries") || "[]");
+
+
+                const unitPrice = 1500; 
+
+                const metadata = {
+                    Email: companyData.Email,
+                    PaymentType: "Corporate",
+                    Beneficiaries: beneficiaries.map(b => ({
+                        Name: b.name,
+                        Amount: b.units * unitPrice
+                    })),
+                    Extra: {
+                        CompanyName: companyData.name || companyData.Name,
+                        CAC: companyData.registrationNumber || companyData.RegistrationNumber,
+                        Address: JSON.stringify(companyData.address || companyData.Address),
+                        TotalUnits: beneficiaries.reduce((sum, b) => sum + b.units, 0)
+                    }
+                };
+
+
+                const totalAmount = beneficiaries.reduce((sum, b) => sum + b.units * unitPrice, 0);
+
+                console.log("beneficiaries: ",beneficiaries);
+                console.log("totalAmount: ",totalAmount);
+
+
+                const initializeDto = {
+                    invoiceNumber: '@Model.InvoiceId',
+                    Amount: totalAmount,
+                    Metadata: JSON.stringify(metadata)
+                };
+
+                console.log("Initializing payment with DTO:", initializeDto);
+                try {
+                    const response = await $.ajax({
+                        url: '/api/Payment/initialize',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(initializeDto)
+                    });
+
+                    if(response?.authorizationUrl){
+                        
+                        window.location.href = response.authorizationUrl;
+                    } else {
+                        alert("Failed to initialize payment. Try again.");
+                    }
+
+                } catch(err) {
+                    console.error(err);
+                    alert("Payment initialization failed. Check console for details.");
+                }
+
+            });
+        });
+    </script>
+
+}

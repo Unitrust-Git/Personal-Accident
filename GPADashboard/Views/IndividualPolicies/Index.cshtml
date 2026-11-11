@@ -1,0 +1,489 @@
+﻿@model GPADashboard.Models.IndividualPoliciesIndexVm
+
+@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Individual Policies";
+    ViewData["ActivePage"] = "IndividualPolicies";
+    @Html.AntiForgeryToken()
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <div>
+        <h4 class="mb-0">Individual Policies</h4>
+        <small class="text-muted">View and filter individual policy records</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm" asp-action="Index">
+            <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body py-3">
+
+        <form method="get" asp-action="Index" class="row g-2 align-items-end">
+
+
+            <div class="col-md-4">
+                <label class="form-label small text-muted">Search</label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="search"
+                       value="@Model.Search"
+                       placeholder="Policy no, Email, Name, NIN" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label small text-muted">Policy Number</label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="policyNumber"
+                       value="@Model.PolicyNumber"
+                       placeholder="Policy number..." />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label small text-muted">Payment Transaction ID</label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="paymentTransactionId"
+                       value="@(Model.PaymentTransactionId?.ToString() ?? "")"
+                       placeholder="Guid..." />
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-sm px-3">
+                    <i class="bi bi-funnel me-1"></i> Filter
+                </button>
+
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm px-3">
+                    Reset
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<table class="ptTable">
+    <thead>
+        <tr>
+            <th>Created</th>
+            <th>Policy No</th>
+            <th>Insured</th>
+            <th>Email</th>
+            <th>Units</th>
+            @* <th>Sum Insured</th> *@
+            <th>Start</th>
+            <th>End</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Items == null || !Model.Items.Any())
+        {
+            <tr>
+                <td colspan="9" class="text-center text-muted py-4">
+                    No records found.
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var x in Model.Items)
+            {
+                <tr>
+                    <td>@x.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@x.PolicyNumber</td>
+                    <td>@($"{x.FirstName} {x.LastName}".Trim())</td>
+                    <td>@x.Email</td>
+                    <td>@x.Units</td>
+                    @* <td>@x.SumInsured.ToString("N2")</td> *@
+                    <td>@x.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@x.EndDate.ToString("yyyy-MM-dd")</td>
+                    <td class="text-end">
+                        <button type="button"
+                                class="btn btn-sm btn-primary js-policy-details"
+                                data-id="@x.Id">
+                            View
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@{
+    var totalPages = (int)Math.Ceiling((double)Model.TotalCount / Math.Max(Model.PageSize, 1));
+}
+
+@if (totalPages > 1)
+{
+    <nav class="mt-3" aria-label="Policies pagination">
+        <ul class="pagination pagination-sm justify-content-center">
+
+
+            <li class="page-item @(Model.Page == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page - 1)"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-search="@Model.Search"
+                   asp-route-policyNumber="@Model.PolicyNumber"
+                   asp-route-paymentTransactionId="@Model.PaymentTransactionId">
+                    Previous
+                </a>
+            </li>
+
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == Model.Page ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-search="@Model.Search"
+                       asp-route-policyNumber="@Model.PolicyNumber"
+                       asp-route-paymentTransactionId="@Model.PaymentTransactionId">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.Page == totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page + 1)"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-search="@Model.Search"
+                   asp-route-policyNumber="@Model.PolicyNumber"
+                   asp-route-paymentTransactionId="@Model.PaymentTransactionId">
+                    Next
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}
+
+<!-- Details Modal -->
+<div class="modal fade" id="policyDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Policy Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body" id="policyDetailsModalBody">
+                <div class="text-muted">Loading...</div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+            function formatDate(dateStr) {
+                if (!dateStr) return '';
+                const d = new Date(dateStr);
+                return isNaN(d.getTime()) ? '' : d.toLocaleDateString();
+            }
+
+            function formatDateTime(dateStr) {
+                if (!dateStr) return '';
+                const d = new Date(dateStr);
+                return isNaN(d.getTime()) ? '' : d.toLocaleString();
+            }
+
+            function formatMoney(v) {
+                if (v === null || v === undefined || v === '') return '';
+                const n = Number(v);
+                if (isNaN(n)) return v;
+                return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function stepBadge(status) {
+                // Your status looks like enum ints. Adjust labels to your enum.
+                // 2 seems "Succeeded" in your response.
+                if (status === 2) return '<span class="badge bg-success">Succeeded</span>';
+                if (status === 1) return '<span class="badge bg-warning text-dark">In Progress</span>';
+                if (status === 3) return '<span class="badge bg-danger">Failed</span>';
+                return `<span class="badge bg-secondary">Status ${status}</span>`;
+            }
+
+            function renderPolicyDetails(p) {
+                const fullName = `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim();
+
+                return `
+        <div class="container-fluid px-0">
+
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+            <div>
+              <div class="text-muted small">Policy Number</div>
+              <div class="fs-5 fw-semibold">${p.policyNumber ?? ''}</div>
+              <div class="text-muted small">Created: ${formatDateTime(p.createdAt)}</div>
+            </div>
+            <div class="text-end">
+              <div class="text-muted small">Sum Insured</div>
+              <div class="fs-5 fw-semibold">${formatMoney(p.sumInsured)}</div>
+              <div class="text-muted small">Units: ${p.units ?? ''} • Unit Price: ${formatMoney(p.unitPrice)}</div>
+            </div>
+
+
+                    ${p.policyNumber && p.policyNumber.trim().length > 0
+                        ? `
+                        <div class="mt-2 d-flex gap-2 flex-wrap">
+
+                          <a href="@Url.Action("DownloadCertificate", "IndividualPolicies")?id=${encodeURIComponent(p.id)}"
+                             class="btn btn-success btn-sm"
+                             target="_blank"
+                             rel="noopener">
+                             <i class="bi bi-download me-1"></i>
+                             Download Certificate
+                          </a>
+
+                          <button class="btn btn-primary btn-sm js-send-policy-email"
+                                  data-id="${p.id}">
+                              <i class="bi bi-envelope me-1"></i>
+                              Send Policy Email
+                          </button>
+
+                        </div>
+                        `
+                    : `
+                    <div class="mt-2">
+                      <button class="btn btn-secondary btn-sm" disabled
+                              title="Certificate not available until policy number is generated">
+                        <i class="bi bi-lock me-1"></i>
+                        Certificate unavailable
+                      </button>
+                    </div>
+                    `
+                }
+
+
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="fw-semibold mb-2">Insured</div>
+                  <dl class="row mb-0">
+                    <dt class="col-5 text-muted small">Name</dt>
+                    <dd class="col-7 mb-2">${fullName}</dd>
+
+                    <dt class="col-5 text-muted small">Email</dt>
+                    <dd class="col-7 mb-2">${p.email ?? ''}</dd>
+
+                    <dt class="col-5 text-muted small">NIN</dt>
+                    <dd class="col-7 mb-0">${p.nin ?? ''}</dd>
+
+                    <dt class="col-5 text-muted small">NIN</dt>
+                    <dd class="col-7 mb-0">${p.nin ?? ''}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="fw-semibold mb-2">Coverage</div>
+                  <dl class="row mb-0">
+                    <dt class="col-5 text-muted small">Start Date</dt>
+                    <dd class="col-7 mb-2">${formatDate(p.startDate)}</dd>
+
+                    <dt class="col-5 text-muted small">End Date</dt>
+                    <dd class="col-7 mb-2">${formatDate(p.endDate)}</dd>
+
+                    <dt class="col-5 text-muted small">Item Code</dt>
+                    <dd class="col-7 mb-0">${p.itemCode ?? ''}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="fw-semibold mb-2">Next of Kin</div>
+                  <dl class="row mb-0">
+                    <dt class="col-5 text-muted small">Name</dt>
+                    <dd class="col-7 mb-2">${p.nextOfKinName ?? ''}</dd>
+
+                    <dt class="col-5 text-muted small">Phone</dt>
+                    <dd class="col-7 mb-0">${p.nextOfKinPhone ?? ''}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="fw-semibold mb-2">References</div>
+                  <dl class="row mb-0">
+                    <dt class="col-5 text-muted small">Payment Tx ID</dt>
+                    <dd class="col-7 mb-2"><code>${p.paymentTransactionId ?? ''}</code></dd>
+
+                    <dt class="col-5 text-muted small">Receipt No</dt>
+                    <dd class="col-7 mb-2">${p.receiptNumber ?? ''}</dd>
+
+                    <dt class="col-5 text-muted small">Debit/Credit Note</dt>
+                    <dd class="col-7 mb-0">${p.debitCreditNoteNumber ?? ''}</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <div class="fw-semibold mb-2">Workflow Status</div>
+                  <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Step</th>
+                          <th>Status</th>
+                          <th>Attempts</th>
+                          <th>Last Attempt</th>
+                          <th>Succeeded At</th>
+                          <th>Last Error</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Payment</td>
+                          <td>${stepBadge(p.paymentStep?.status)}</td>
+                          <td>${p.paymentStep?.attemptCount ?? 0}</td>
+                          <td>${formatDateTime(p.paymentStep?.lastAttemptAt)}</td>
+                          <td>${formatDateTime(p.paymentStep?.succeededAt)}</td>
+                          <td class="text-danger">${p.paymentStep?.lastError ?? ''}</td>
+                        </tr>
+                        <tr>
+                          <td>Policy</td>
+                          <td>${stepBadge(p.policyStep?.status)}</td>
+                          <td>${p.policyStep?.attemptCount ?? 0}</td>
+                          <td>${formatDateTime(p.policyStep?.lastAttemptAt)}</td>
+                          <td>${formatDateTime(p.policyStep?.succeededAt)}</td>
+                          <td class="text-danger">${p.policyStep?.lastError ?? ''}</td>
+                        </tr>
+                        <tr>
+                          <td>Billing</td>
+                          <td>${stepBadge(p.billingStep?.status)}</td>
+                          <td>${p.billingStep?.attemptCount ?? 0}</td>
+                          <td>${formatDateTime(p.billingStep?.lastAttemptAt)}</td>
+                          <td>${formatDateTime(p.billingStep?.succeededAt)}</td>
+                          <td class="text-danger">${p.billingStep?.lastError ?? ''}</td>
+                        </tr>
+                        <tr>
+                          <td>Receipt</td>
+                          <td>${stepBadge(p.receiptStep?.status)}</td>
+                          <td>${p.receiptStep?.attemptCount ?? 0}</td>
+                          <td>${formatDateTime(p.receiptStep?.lastAttemptAt)}</td>
+                          <td>${formatDateTime(p.receiptStep?.succeededAt)}</td>
+                          <td class="text-danger">${p.receiptStep?.lastError ?? ''}</td>
+                        </tr>
+                        <tr>
+                          <td>Email</td>
+                          <td>${stepBadge(p.emailStep?.status)}</td>
+                          <td>${p.emailStep?.attemptCount ?? 0}</td>
+                          <td>${formatDateTime(p.emailStep?.lastAttemptAt)}</td>
+                          <td>${formatDateTime(p.emailStep?.succeededAt)}</td>
+                          <td class="text-danger">${p.emailStep?.lastError ?? ''}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="mt-3">
+                    <div class="text-muted small">Email Kind: <span class="fw-semibold">${p.emailKind ?? ''}</span></div>
+                    <div class="text-muted small">Email Sent At: <span class="fw-semibold">${formatDateTime(p.emailSentAt)}</span></div>
+                    <div class="text-muted small">Updated At: <span class="fw-semibold">${formatDateTime(p.updatedAt)}</span></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        `;
+            }
+
+            $(function () {
+                $(document).on('click', '.js-policy-details', function () {
+                    const id = $(this).data('id');
+
+                    $('#policyDetailsModalBody').html('<div class="text-muted">Loading...</div>');
+
+                    const url = '@Url.Action("Details", "IndividualPolicies")' + '?id=' + encodeURIComponent(id);
+
+                    $.getJSON(url)
+                        .done(function (p) {
+                            $('#policyDetailsModalBody').html(renderPolicyDetails(p));
+
+                            const modalEl = document.getElementById('policyDetailsModal');
+                            const modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        })
+                        .fail(function (xhr) {
+                            const msg = xhr.status === 404
+                                ? "Policy not found."
+                                : "Failed to load policy details.";
+
+                            $('#policyDetailsModalBody').html(`<div class="alert alert-danger mb-0">${msg}</div>`);
+
+                            const modalEl = document.getElementById('policyDetailsModal');
+                            const modal = new bootstrap.Modal(modalEl);
+                            modal.show();
+                        });
+                });
+
+        $(document).on('click', '.js-send-policy-email', function () {
+
+            const id = $(this).data('id');
+            const btn = $(this);
+
+            const token = $('input[name="__RequestVerificationToken"]').val();
+
+            btn.prop('disabled', true)
+               .html('<span class="spinner-border spinner-border-sm me-1"></span>Sending...');
+
+            $.ajax({
+                url: '@Url.Action("SendPolicyEmail", "IndividualPolicies")',
+                type: 'POST',
+                data: {
+                    id: id,
+                    __RequestVerificationToken: token
+                }
+            })
+            .done(function () {
+                alert('Policy email sent successfully.');
+            })
+            .fail(function (xhr) {
+                alert(xhr.responseText || 'Failed to send email.');
+            })
+            .always(function () {
+                btn.prop('disabled', false)
+                   .html('<i class="bi bi-envelope me-1"></i> Send Policy Email');
+            });
+        });
+            });
+    </script>
+}
+
+
+

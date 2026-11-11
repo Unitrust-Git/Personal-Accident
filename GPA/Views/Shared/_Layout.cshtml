@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GPA</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/GPA.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+
+    <style>
+        .selectable-card {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            cursor: pointer;
+            border-radius: 16px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+            .selectable-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+                background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            }
+
+            .selectable-card.active {
+                transform: scale(1.05);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+                background: linear-gradient(135deg, #004085 0%, #003060 100%);
+            }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.7rem;
+        }
+
+        .card-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .features-list li {
+            margin: 10px 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .features-list i {
+            color: #00ffea;
+        }
+
+        #component-container {
+            min-height: 250px;
+        }
+
+
+    </style>
+
+
+</head>
+<body>
+
+    <div class="container-fluid p-0">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - Unitrust Insurance - <a href="https://unitrustinsurance.com/page/privacy-policy" target="_blank">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <!-- COOKIE CONSENT BANNER -->
+    <div id="cookieConsentBanner" class="cookie-consent-banner">
+        <div class="cookie-consent-card">
+            <button type="button" class="cookie-close-btn" id="closeConsentBanner" aria-label="Close">
+                &times;
+            </button>
+
+            <h4 class="cookie-title">Consent</h4>
+
+            <p class="cookie-text">
+                We use cookies to enhance your online experience. Your information is processed strictly
+                in accordance with the Nigeria Data Protection Act (NDPA) and other applicable regulations.
+                By clicking "Accept All", you consent to our
+                <a href="https://unitrustinsurance.com/page/cookie-policy">Cookie Policy</a> and
+                <a href="https://unitrustinsurance.com/page/privacy-policy">Privacy Policy</a>.
+            </p>
+
+            <p class="cookie-text mb-0">
+                See our <a href="https://unitrustinsurance.com/page/cookie-policy">Cookie Policy</a> and
+                <a href="https://unitrustinsurance.com/page/privacy-policy">Privacy Policy</a> for more information.
+            </p>
+
+            <div class="cookie-actions">
+                <button type="button" class="btn btn-cookie-primary" id="acceptAllCookies">
+                    Accept All
+                </button>
+
+                <button type="button" class="btn btn-cookie-secondary" id="rejectAllCookies">
+                    Reject All
+                </button>
+
+                <button type="button" class="btn btn-cookie-outline" id="openCookieSettings">
+                    Customize Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COOKIE SETTINGS MODAL -->
+    <div id="cookieSettingsModal" class="cookie-settings-overlay">
+        <div class="cookie-settings-modal">
+            <div class="cookie-settings-header">
+                <h3 class="mb-0">Cookie Settings and User Controls</h3>
+                <button type="button" class="cookie-close-btn" id="closeCookieSettings" aria-label="Close">
+                    &times;
+                </button>
+            </div>
+
+            <div class="cookie-settings-body">
+                <div class="cookie-setting-row">
+                    <div class="cookie-setting-left">
+                        <div class="cookie-setting-arrow">&#9654;</div>
+                        <div>
+                            <div class="cookie-setting-title">Required (Strictly Necessary) Cookies</div>
+                            <div class="cookie-setting-subtext">Always Active</div>
+                        </div>
+                    </div>
+                    <label class="cookie-switch">
+                        <input type="checkbox" checked disabled>
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+
+                <div class="cookie-setting-row">
+                    <div class="cookie-setting-left">
+                        <div class="cookie-setting-arrow">&#9654;</div>
+                        <div>
+                            <div class="cookie-setting-title">Analytics Cookies</div>
+                            <div class="cookie-setting-subtext">Optional - Disabled by Default</div>
+                        </div>
+                    </div>
+                    <label class="cookie-switch">
+                        <input type="checkbox" id="analyticsCookies">
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+
+                <div class="cookie-setting-row">
+                    <div class="cookie-setting-left">
+                        <div class="cookie-setting-arrow">&#9654;</div>
+                        <div>
+                            <div class="cookie-setting-title">Functional or Preference Cookies</div>
+                            <div class="cookie-setting-subtext">Optional - Disabled by Default</div>
+                        </div>
+                    </div>
+                    <label class="cookie-switch">
+                        <input type="checkbox" id="functionalCookies">
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+
+                <div class="cookie-setting-row">
+                    <div class="cookie-setting-left">
+                        <div class="cookie-setting-arrow">&#9654;</div>
+                        <div>
+                            <div class="cookie-setting-title">Marketing or Advertising Cookies</div>
+                            <div class="cookie-setting-subtext">Optional - Disabled by Default</div>
+                        </div>
+                    </div>
+                    <label class="cookie-switch">
+                        <input type="checkbox" id="marketingCookies">
+                        <span class="cookie-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cookie-settings-footer">
+                <button type="button" class="btn btn-cookie-primary w-100" id="saveCookiePreferences">
+                    Save My Preferences
+                </button>
+
+                <button type="button" class="btn btn-cookie-outline w-100" id="acceptAllFromSettings">
+                    Accept All
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <script>
+    @if (TempData["Success"] != null)
+    {
+        <text>toastr.success("@TempData["Success"]");</text>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <text>toastr.error("@TempData["Error"]");</text>
+    }
+    @if (TempData["Info"] != null)
+    {
+        <text>toastr.info("@TempData["Info"]");</text>
+    }
+    @if (TempData["Warning"] != null)
+    {
+        <text>toastr.warning("@TempData["Warning"]");</text>
+    }
+</script>
+    <script>
+        window.notify = function(type, message, title) {
+          if (!window.toastr) return;
+
+          switch ((type || "").toLowerCase()) {
+            case "success": toastr.success(message, title); break;
+            case "error": toastr.error(message, title); break;
+            case "warning": toastr.warning(message, title); break;
+            default: toastr.info(message, title); break;
+          }
+        };
+
+        toastr.options = {
+          closeButton: true,
+          progressBar: true,
+          positionClass: "toast-top-right",
+          timeOut: 4000
+        };
+    </script>
+    <script>
+            (function () {
+                const consentBanner = document.getElementById("cookieConsentBanner");
+                const settingsModal = document.getElementById("cookieSettingsModal");
+
+                const acceptAllBtn = document.getElementById("acceptAllCookies");
+                const rejectAllBtn = document.getElementById("rejectAllCookies");
+                const openSettingsBtn = document.getElementById("openCookieSettings");
+                const closeBannerBtn = document.getElementById("closeConsentBanner");
+
+                const closeSettingsBtn = document.getElementById("closeCookieSettings");
+                const savePreferencesBtn = document.getElementById("saveCookiePreferences");
+                const acceptAllFromSettingsBtn = document.getElementById("acceptAllFromSettings");
+
+                const analyticsCookies = document.getElementById("analyticsCookies");
+                const functionalCookies = document.getElementById("functionalCookies");
+                const marketingCookies = document.getElementById("marketingCookies");
+
+                const storageKey = "unitrust_cookie_preferences";
+
+                function getDefaultPreferences() {
+                    return {
+                        necessary: true,
+                        analytics: false,
+                        functional: false,
+                        marketing: false,
+                        consentGiven: false
+                    };
+                }
+
+                function savePreferences(preferences) {
+                    localStorage.setItem(storageKey, JSON.stringify(preferences));
+                }
+
+                function loadPreferences() {
+                    const saved = localStorage.getItem(storageKey);
+                    return saved ? JSON.parse(saved) : null;
+                }
+
+                function hideBanner() {
+                    consentBanner.classList.remove("show");
+                }
+
+                function showBanner() {
+                    consentBanner.classList.add("show");
+                }
+
+                function showSettings() {
+                    settingsModal.classList.add("show");
+                    document.body.style.overflow = "hidden";
+                }
+
+                function hideSettings() {
+                    settingsModal.classList.remove("show");
+                    document.body.style.overflow = "";
+                }
+
+                function applyPreferencesToUI(preferences) {
+                    analyticsCookies.checked = !!preferences.analytics;
+                    functionalCookies.checked = !!preferences.functional;
+                    marketingCookies.checked = !!preferences.marketing;
+                }
+
+                function acceptAll() {
+                    const preferences = {
+                        necessary: true,
+                        analytics: true,
+                        functional: true,
+                        marketing: true,
+                        consentGiven: true
+                    };
+
+                    savePreferences(preferences);
+                    hideBanner();
+                    hideSettings();
+                }
+
+                function rejectAll() {
+                    const preferences = {
+                        necessary: true,
+                        analytics: false,
+                        functional: false,
+                        marketing: false,
+                        consentGiven: true
+                    };
+
+                    savePreferences(preferences);
+                    hideBanner();
+                    hideSettings();
+                }
+
+                function saveCustomPreferences() {
+                    const preferences = {
+                        necessary: true,
+                        analytics: analyticsCookies.checked,
+                        functional: functionalCookies.checked,
+                        marketing: marketingCookies.checked,
+                        consentGiven: true
+                    };
+
+                    savePreferences(preferences);
+                    hideBanner();
+                    hideSettings();
+                }
+
+                const existingPreferences = loadPreferences();
+
+                if (!existingPreferences || !existingPreferences.consentGiven) {
+                    const defaults = getDefaultPreferences();
+                    applyPreferencesToUI(defaults);
+                    showBanner();
+                } else {
+                    applyPreferencesToUI(existingPreferences);
+                }
+
+                acceptAllBtn?.addEventListener("click", acceptAll);
+                rejectAllBtn?.addEventListener("click", rejectAll);
+                openSettingsBtn?.addEventListener("click", showSettings);
+                closeBannerBtn?.addEventListener("click", hideBanner);
+
+                closeSettingsBtn?.addEventListener("click", hideSettings);
+                savePreferencesBtn?.addEventListener("click", saveCustomPreferences);
+                acceptAllFromSettingsBtn?.addEventListener("click", acceptAll);
+
+                settingsModal?.addEventListener("click", function (e) {
+                    if (e.target === settingsModal) {
+                        hideSettings();
+                    }
+                });
+            })();
+        </script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,506 @@
+﻿@model GPA.Models.IndividualInvoiceViewModel
+
+@{
+    ViewBag.Title = "Invoice";
+
+    var totalPremium = Model.Units * Model.UnitPrice;
+}
+
+
+<div class="form-background">
+
+    <div class="form-container container">
+
+        <a href="/Home/Index"
+           class="btn btn-outline-light mb-3">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+
+        <div class="form-card">
+
+
+            <!-- HEADER -->
+
+            <div class="application-header mb-5">
+
+                <div class="application-icon">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+
+                <div>
+
+                    <h2 class="application-title">
+                        Payment Summary
+                    </h2>
+
+
+                    <p class="application-subtitle mb-0">
+                        Review your Personal Accident Insurance details before completing payment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- INVOICE INFO -->
+
+            <div class="section-card">
+
+
+                <div class="section-header">
+
+                    <div class="section-icon">
+                        <i class="bi bi-file-earmark-text"></i>
+                    </div>
+
+
+                    <div>
+
+                        <h5>
+                            Invoice Information
+                        </h5>
+
+
+                        <p>
+                            Your policy reference details.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Invoice Number
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.InvoiceId" />
+
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Client Code
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.ClientCode" />
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- CUSTOMER DETAILS -->
+
+            <div class="section-card">
+
+
+                <div class="section-header">
+
+                    <div class="section-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+
+                    <div>
+
+                        <h5>
+                            Customer Details
+                        </h5>
+
+
+                        <p>
+                            Registered customer information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Full Name
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.FullName" />
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Email
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.Email" />
+
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Phone Number
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.Phone" />
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- COVERAGE -->
+
+            <div class="section-card">
+
+
+                <div class="section-header">
+
+                    <div class="section-icon">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h5>
+                            Coverage Details
+                        </h5>
+
+
+                        <p>
+                            Your selected insurance coverage.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label small fw-semibold">
+                            Coverage Units
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.Units" />
+
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label small fw-semibold">
+                            Unit Price
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="₦@Model.UnitPrice.ToString("N0")" />
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <!-- NOK -->
+
+            <div class="section-card">
+
+
+                <div class="section-header">
+
+                    <div class="section-icon">
+                        <i class="bi bi-person-heart"></i>
+                    </div>
+
+
+                    <div>
+
+                        <h5>
+                            Additional Information
+                        </h5>
+
+
+                        <p>
+                            Emergency contact information.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Next of Kin
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.NextOfKinName" />
+
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label small fw-semibold">
+                            Phone Number
+                        </label>
+
+
+                        <input class="form-control form-control-sm"
+                               readonly
+                               value="@Model.NextOfKinPhone" />
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+            <!-- TOTAL -->
+
+            <div class="total-box mt-4">
+
+                <div>
+                    Total Premium
+                </div>
+
+
+                <h2 class="fw-bold mb-0">
+
+                    ₦@totalPremium.ToString("N0")
+
+                </h2>
+
+            </div>
+
+            <button id="payInvoice"
+                    class="btn btn-primary w-100 mt-4">
+
+                Proceed to Payment
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div id="pageLoader" class="loader-overlay d-none" aria-hidden="true">
+
+    <div class="loader-card">
+
+        <div class="spinner-border"></div>
+
+        <div class="mt-3 fw-semibold">
+            Redirecting to payment...
+        </div>
+
+        <div class="text-muted small">
+            Please don't close this page.
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        const payBtn = document.getElementById("payInvoice");
+        const loader = document.getElementById("pageLoader");
+
+        function showLoader(){
+
+            if(loader){
+                loader.classList.remove("d-none");
+                loader.setAttribute("aria-hidden","false");
+            }
+
+            payBtn.disabled = true;
+
+            payBtn.innerHTML =
+            `
+                Processing...
+                <span class="spinner-border spinner-border-sm ms-2"></span>
+            `;
+        }
+
+        function hideLoader() {
+            loader.classList.add("d-none");
+            loader.setAttribute("aria-hidden", "true");
+            payBtn.disabled = false;
+            payBtn.classList.remove("disabled");
+            payBtn.innerHTML = "Proceed to Payment";
+        }
+
+        payBtn.addEventListener("click", async () => {
+            showLoader();
+
+            try {
+                const payload = {
+                    amount: @totalPremium,
+                    metadata: JSON.stringify({
+
+            paymentType: "Individual",
+
+            totalAmount: "@totalPremium",
+
+            invoiceNumber: "@Model.InvoiceId",
+
+
+            // Customer reference
+            clientCode: "@Model.ClientCode",
+
+
+            // Customer display details
+            fullName: "@Model.FullName",
+
+            email: "@Model.Email",
+
+            phone: "@(Model.Phone ?? "")",
+
+
+
+            // Coverage
+            units: "@Model.Units",
+
+            unitPrice: "@Model.UnitPrice",
+
+
+
+            // Next of Kin
+            nextOfKinName: "@(Model.NextOfKinName ?? "")",
+
+            nextOfKinPhone: "@(Model.NextOfKinPhone ?? "")",
+
+
+
+            // Referral
+            isReferral: @(Model.IsReferral.ToString().ToLower()),
+
+            cloCode: "@(Model.CloCode ?? "")",
+
+            cloName: "@(Model.CloName ?? "")"
+
+        })
+                };
+
+                const response = await fetch("/api/payment/initialize", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const error = await response.text();
+                    hideLoader();
+                    alert("Payment initialization failed: " + error);
+                    return;
+                }
+
+                const data = await response.json();
+
+                if (!data || !data.authorizationUrl) {
+                    hideLoader();
+                    alert("Payment initialization failed: Invalid response from server.");
+                    return;
+                }
+
+                window.location.href = data.authorizationUrl;
+
+            } catch (ex) {
+                console.log(ex);
+                hideLoader();
+                alert("Something went wrong while initializing payment.");
+            }
+        });
+    </script>
+}
+

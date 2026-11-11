@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Payment Failed";
+
+    var reason = (string?)ViewBag.Reason ?? "unknown";
+    var reference = (string?)ViewBag.Reference;
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm border-danger" style="max-width: 520px; width: 100%;">
+        <div class="card-body text-center p-4">
+
+            <div class="mb-3" style="font-size: 3rem;">❌</div>
+
+            <h4 class="mb-2 text-danger">Payment Failed</h4>
+
+            <p class="text-muted">
+                Unfortunately, your payment could not be completed.
+            </p>
+
+            <div class="alert alert-warning text-start">
+                <strong>Reason:</strong>
+                <span class="text-capitalize">@reason.Replace("-", " ")</span>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(reference))
+            {
+                <div class="mb-3">
+                    <p class="small text-muted mb-1">Transaction Reference</p>
+                    <p class="fw-semibold">@reference</p>
+                </div>
+            }
+
+            <div class="d-grid gap-2">
+
+                @if (!string.IsNullOrWhiteSpace(reference))
+                {
+                    <a href="/payment/callback?reference=@reference"
+                       class="btn btn-primary btn-lg">
+                        Retry Payment Check
+                    </a>
+                }
+
+                <a href="/" class="btn btn-outline-secondary">
+                    Go Home
+                </a>
+
+            </div>
+
+            <hr />
+
+            <p class="small text-muted">
+                If you were charged but still see this message,
+                please contact support and provide your transaction reference.
+            </p>
+
+        </div>
+    </div>
+</div>

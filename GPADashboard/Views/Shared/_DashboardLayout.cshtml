@@ -1,0 +1,235 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    // var displayName = HttpContextAccessor.HttpContext?.Session.GetString("UserName") ?? "User";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] - Dashboard</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        #sidebar {
+            width: 220px;
+            font-size: 0.9rem;
+            background: #343a40 !important;
+
+           
+        }
+
+
+        #sidebar .nav-link {
+                color: #e9ecef !important;
+                font-size: 0.9rem;
+                font-weight: 500;
+                padding: 10px 14px;
+            }
+
+         #sidebar .nav-link:hover,
+         #sidebar .nav-link.active {
+                    background-color: #495057;
+                    color: #ffffff !important;
+                    font-size: 0.85rem;
+                    padding-left: 18px;
+                }
+
+
+            #sidebar .sidebar-header,
+            #sidebar h5 {
+                color: #fff;
+                font-size: 1rem;
+                font-weight: 600;
+                letter-spacing: 0.3px;
+            }
+
+        .sidebar-footer .nav-link {
+            font-size: 0.85rem;
+        }
+
+
+        #content {
+            /* margin-left: 240px; */
+            padding: 20px;
+            width: calc(100% - 240px);
+            transition: margin-left .25s ease, width .25s ease;
+        }
+
+    </style>
+
+    <style>
+
+        table.dataTable tbody tr {
+            height: 32px !important;
+        }
+
+        table.dataTable td,
+        table.dataTable th {
+            padding: 4px 8px !important;
+            font-size: 12px !important;
+            white-space: nowrap;
+        }
+
+        table.dataTable {
+            width: 100% !important;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div id="sidebar" class="sidebar-advanced border-end d-flex flex-column">
+
+        <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-3">
+            <h5 class="m-0 fw-bold">Personal Accident Dashboard</h5>
+            <button id="toggleSidebar" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-layout-sidebar-inset"></i>
+            </button>
+        </div>
+
+        <ul class="nav flex-column px-2">
+
+            <li class="nav-item">
+                <a class="nav-link adv-link d-flex justify-content-between align-items-center"
+                   data-bs-toggle="collapse"
+                   href="#motorMenu"
+                   role="button"
+                   aria-expanded="true"
+                   aria-controls="motorMenu">
+
+                    <span class="d-flex align-items-center">
+                        <i class="bi bi-journal-text me-2"></i>
+                        <span class="text">Policies</span>
+                    </span>
+
+                    <i class="bi bi-chevron-down icon small"></i>
+                </a>
+            </li>
+
+            <div class="collapse show" id="motorMenu">
+                <ul class="nav flex-column ms-3 mt-1">
+
+                    <li class="nav-item">
+                        <a class="nav-link adv-link @(ViewData["ActivePage"]?.ToString() == "Individual Policies" ? "active" : "")"
+                           href="@Url.Action("Index", "IndividualPolicies")">
+                            <i class="bi bi-person-badge me-2"></i>
+                            <span class="text">Individual</span>
+                        </a>
+                    </li>
+
+@*                     <li class="nav-item">
+                        <a class="nav-link adv-link @(ViewData["ActivePage"]?.ToString() == "Corporate Policies" ? "active" : "")"
+                           href="@Url.Action("Policies", "Motor")">
+                            <i class="bi bi-buildings me-2"></i>
+                            <span class="text">Corporate</span>
+                        </a>
+                    </li> *@
+
+                </ul>
+            </div>
+
+            <li class="nav-item mt-2">
+                <a class="nav-link adv-link d-flex align-items-center @(ViewData["ActivePage"]?.ToString() == "Payments" ? "active" : "")"
+                   href="@Url.Action("Index", "Payments")">
+                    <i class="bi bi-buildings me-2"></i>
+                    <span class="text">Payments</span>
+                </a>
+            </li>
+
+            <li class="nav-item mt-2">
+                <a class="nav-link adv-link d-flex align-items-center @(ViewData["ActivePage"]?.ToString() == "Policy Processing" ? "active" : "")"
+                   href="@Url.Action("Index", "PolicyQueue")">
+                    <i class="bi bi-arrow-repeat me-2"></i>
+                    <span class="text">Policy Processing</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link adv-link @(ViewData["ActivePage"]?.ToString() == "Policy Reconciliation" ? "active" : "")"
+                   href="@Url.Action("Reconciliation", "IndividualPolicies")">
+                    <i class="bi bi-shield-check me-2"></i>
+                    <span class="text">Policy Reconciliation</span>
+                </a>
+            </li>
+
+        </ul>
+
+        <!-- Footer -->
+        <div class="sidebar-footer mt-auto px-3 mb-3">
+
+            <div class="nav-link adv-link text-danger d-flex align-items-center">
+                <i class="bi bi-person-circle me-2"></i>
+                @* <strong>@displayName</strong> *@
+            </div>
+
+            <a href="/Account/Logout" class="nav-link adv-link text-danger d-flex align-items-center" data-bs-toggle="tooltip" title="Logout">
+                <i class="bi bi-box-arrow-right icon me-2"></i>
+                <span class="text">Logout</span>
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <div id="content">
+        @RenderBody()
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.ptTable').DataTable({
+                paging: false,
+                searching: false,
+                lengthChange: false,
+                order: [[0, 'desc']]
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    @if (TempData["Success"] != null)
+    {
+            <text>toastr.success("@TempData["Success"]");</text>
+    }
+    @if (TempData["Error"] != null)
+    {
+            <text>toastr.error("@TempData["Error"]");</text>
+    }
+    @if (TempData["Info"] != null)
+    {
+            <text>toastr.info("@TempData["Info"]");</text>
+    }
+    @if (TempData["Warning"] != null)
+    {
+            <text>toastr.warning("@TempData["Warning"]");</text>
+    }
+</script>
+</html>

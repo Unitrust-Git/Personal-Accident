@@ -1,0 +1,277 @@
+﻿
+
+<div class="container my-4">
+
+    <div class="progress mb-3" style="height: 10px;">
+        <div id="progressBar" class="progress-bar bg-primary" style="width: 40%;"></div>
+    </div>
+    <div class="text-center small fw-semibold text-primary mb-4">
+        <span id="progressStepLabel">Step 2 of 5 — Company Details</span>
+    </div>
+
+    <div class="form-card p-4 shadow rounded-4 bg-white">
+
+        <h4 class="fw-bold text-primary mb-4">Corporate GPA Insurance</h4>
+
+
+        <div id="company-section">
+            <h6 class="section-title fw-bold">Company Verification</h6>
+
+            <div class="row align-items-end mb-3">
+                <div class="col-md-8">
+                    <label class="form-label">CAC Number</label>
+                    <input id="cacInput" class="form-control form-control-sm" placeholder="e.g. RC1234567" />
+                </div>
+                <div class="col-md-4 mt-3 mt-md-0">
+                    <button type="button" id="btnVerifyCompany" class="btn btn-primary w-100 small-text-btn">
+                        Verify Company
+                    </button>
+                </div>
+            </div>
+
+            <div id="companyError" class="text-danger small d-none"></div>
+            
+            <div id="companyDetails" class="d-none mt-3 p-4 rounded bg-light">
+                <div class="d-flex justify-content-between">
+                    <h5 class="m-0 fw-bold">Company Verified</h5>
+                    <span class="badge bg-success">✔ Verified</span>
+                </div>
+                <hr>
+                <div class="row text-start">
+                    <div class="col-md-6">
+                        <strong class="text-muted">Name:</strong>
+                        <div id="companyName"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <strong class="text-muted">Registration:</strong>
+                        <div id="companyReg"></div>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <strong class="text-muted">Address:</strong>
+                        <div id="companyAddress"></div>
+                    </div>
+                </div>
+                <div class="row align-items-end mb-3 mt-2">
+                    <div class="col-md-12">
+                        <label class="form-label">Email</label>
+                        <input id="corporateEmail" class="form-control form-control-sm" placeholder="Enter company/HR email" />
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+        <!-- BENEFICIARIES SECTION -->
+        <div id="beneficiaries-section" class="d-none mt-5">
+
+
+            <button class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 w-100 mb-3 py-2"
+                    data-bs-toggle="modal" data-bs-target="#beneficiaryModal">
+                <i class="bi bi-person-plus-fill"></i>
+                <span>Add Beneficiary</span>
+            </button>
+
+
+            <!-- CARD CONTAINER -->
+            <div id="beneficiaryCards" class="row g-4"></div>
+
+
+            <div class="mt-3 text-end fw-semibold">
+                Total Premium: ₦<span id="totalPremium">0</span>
+            </div>
+
+            <button id="btnProceedToReview" class="btn btn-primary btn-lg w-100 mt-3 d-none">
+                Proceed to invoice
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="beneficiaryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 modal-elegant p-3">
+
+            <div class="modal-header border-0 px-3 pt-3">
+                <h5 class="modal-title fw-bold">Add Beneficiary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-3">
+                <div class="mb-2">
+                    <label for="benName" class="form-label small fw-semibold">Full Name</label>
+                    <input id="benName" class="form-control form-control-sm" placeholder="Enter full beneficiary name">
+                </div>
+
+                <div class="mb-2">
+                    <label for="benPhone" class="form-label small fw-semibold">Phone Number</label>
+                    <input id="benPhone" class="form-control form-control-sm" placeholder="e.g 08012345678">
+                </div>
+
+                <div class="mb-2">
+                    <label for="units" class="form-label small fw-semibold">Units</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <input id="units" type="number" value="1" min="1" class="form-control form-control-sm w-auto">
+                        <span class="text-muted small">unit(s)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 px-3 pb-3">
+                <button class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary btn-sm" id="nextStep">Add</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    window.beneficiaries = window.beneficiaries || [];
+    window.unitPrice = window.unitPrice || 1500;
+
+
+    function updateProgress(step) {
+        const steps = {2: 40, 3: 60, 4: 80};
+        $("#progressBar").css("width", steps[step] + "%");
+        $("#progressStepLabel").text(
+            step === 2 ? "Step 2 of 5 — Company Details" :
+            step === 3 ? "Step 3 of 5 — Beneficiaries" :
+            "Step 4 of 5 — Review Summary"
+        );
+    }
+
+
+    $("#btnVerifyCompany").click(function () {
+        const cac = $("#cacInput").val().trim();
+        if (!cac) return $("#companyError").text("Enter CAC Number").removeClass("d-none");
+
+        $.get('@Url.Action("VerifyBusiness", "GPA")', { registrationNumber: cac })
+         .done(resp => {
+            if (!resp.success || !resp.data) return $("#companyError").text("Company not found").removeClass("d-none");
+            console.log(resp);
+            $("#companyName").text(resp.data.name);
+            $("#companyReg").text(resp.data.registrationNumber);
+            $("#companyAddress").text(resp.data.address);
+            $("#companyDetails, #beneficiaries-section").removeClass("d-none");
+
+            sessionStorage.setItem("companyData", JSON.stringify(resp.data));
+            updateProgress(3);
+        });
+    });
+
+    function renderCards() {
+        const container = $("#beneficiaryCards");
+        container.empty();
+        let total = 0;
+
+        window.beneficiaries.forEach((b, i) => {
+            total += b.units * unitPrice;
+            container.append(`
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card beneficiary-card p-2 rounded-3 shadow-sm">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="name-container text-start mb-1">${b.name}</h6>
+                            <button class="btn btn-sm btn-outline-danger remove p-1" data-id="${i}">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                        <div class="mb-1">
+                            <small class="text-muted d-block">${b.phone}</small>
+                        </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <button class="btn btn-outline-secondary btn-sm minus-unit" data-id="${i}">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <span class="mx-2 fw-bold">${b.units}</span>
+                            <button class="btn btn-outline-secondary btn-sm plus-unit" data-id="${i}">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                            <span class="badge bg-success ms-auto small">₦ ${(b.units*unitPrice).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+
+        $("#totalPremium").text(total.toLocaleString());
+
+            if (beneficiaries.length > 0) {
+                $("#btnProceedToReview").removeClass("d-none");
+            } else {
+                $("#btnProceedToReview").addClass("d-none");
+            }
+    }
+
+    $(document).on("click", ".remove", function(){
+        const i = $(this).data("id");
+        window.beneficiaries.splice(i, 1);
+        renderCards();
+    });
+
+    $(document).on("click", ".plus-unit", function(){
+        const i = $(this).data("id");
+        window.beneficiaries[i].units++;
+        renderCards();
+    });
+
+    $(document).on("click", ".minus-unit", function(){
+        const i = $(this).data("id");
+        if(window.beneficiaries[i].units > 1) window.beneficiaries[i].units--;
+        renderCards();
+    });
+
+    $("#btnProceedToReview").click(function(){
+                        console.log(window.beneficiaries)
+            if(!window.beneficiaries.length) {
+                return alert("Add at least 1 beneficiary");
+            }
+
+            const email = $("#corporateEmail").val().trim();
+            const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+                if(!email || !emailRegex.test(email)) {
+                        return alert("Enter a valid email address");
+                    }
+
+                const companyData = JSON.parse(sessionStorage.getItem("companyData") || "{}");
+
+                companyData.Email = email;
+
+                sessionStorage.setItem("companyData", JSON.stringify(companyData));
+
+
+
+        $.post('/Home/SetCorporateSession', {
+            companyData: JSON.stringify(JSON.parse(sessionStorage.getItem("companyData"))),
+            insuredList: JSON.stringify(window.beneficiaries)
+        }).done(function() {
+            window.location.href = "/Home/Invoice";
+        });
+    });
+
+
+    $("#nextStep").click(() => {
+        const name = $("#benName").val().trim();
+        const phone = $("#benPhone").val().trim();
+        const units = parseInt($("#units").val().trim());
+
+        if (!name || !phone || units < 1) return alert("Fill all fields correctly.");
+
+        window.beneficiaries.push({ name, phone, units });
+        sessionStorage.setItem("corporateBeneficiaries", JSON.stringify(window.beneficiaries));
+        renderCards();
+
+        $("#benName, #benPhone").val("");
+        $("#units").val(1);
+
+        $("#beneficiaryModal").modal("hide");
+    });
+</script>
+

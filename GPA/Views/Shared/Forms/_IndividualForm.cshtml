@@ -1,0 +1,1449 @@
+﻿<div class="container form-container my-5">
+
+    <div class="form-card">
+
+        <!-- HEADER -->
+        <div class="application-header">
+
+            <div class="application-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+
+            <div>
+                <h2 class="application-title">
+                    Individual Personal Accident Insurance
+                </h2>
+
+                <p class="application-subtitle">
+                    Complete your application securely. Your coverage starts once payment is confirmed.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+        <div class="application-progress">
+
+            <div class="progress-step active" id="stepCustomer">
+
+                <div class="step-circle">
+                    <i class="bi bi-person"></i>
+                </div>
+
+                <span>Customer</span>
+
+            </div>
+
+
+            <div class="progress-line"></div>
+
+
+            <div class="progress-step" id="stepIdentity">
+
+                <div class="step-circle">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+                <span>Identity</span>
+
+            </div>
+
+
+            <div class="progress-line"></div>
+
+
+            <div class="progress-step" id="stepDetails">
+
+                <div class="step-circle">
+                    <i class="bi bi-file-text"></i>
+                </div>
+
+                <span>Details</span>
+
+            </div>
+
+
+            <div class="progress-line"></div>
+
+
+            <div class="progress-step" id="stepCoverage">
+
+                <div class="step-circle">
+                    <i class="bi bi-shield"></i>
+                </div>
+
+                <span>Coverage</span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CUSTOMER SEARCH -->
+
+        <div id="customer-search-section"
+             class="section-card">
+
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+
+                <div>
+                    <h5>
+                        Find Customer
+                    </h5>
+
+                    <p>
+                        Search existing customers using email and phone number.
+                    </p>
+                </div>
+
+            </div>
+
+
+
+            <div id="customerLookup">
+
+
+                <div id="lookupFields">
+
+                    <div class="row">
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+
+                            <input id="lookupEmail"
+                                   class="form-control"
+                                   placeholder="example@email.com" />
+
+                        </div>
+
+
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Phone Number
+                            </label>
+
+
+                            <input id="lookupPhone"
+                                   class="form-control"
+                                   placeholder="080xxxxxxxx" />
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <button id="btnLookupCustomer"
+                            class="btn btn-primary w-100">
+
+                        Continue
+                        <i class="bi bi-arrow-right ms-2"></i>
+
+                    </button>
+
+
+                </div>
+
+
+
+                <button id="btnChangeCustomer"
+                        class="btn btn-outline-secondary d-none">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Change Customer
+
+                </button>
+
+
+
+            </div>
+
+
+
+            <div id="existingCustomers"
+                 class="d-none mt-4">
+
+
+                <h6 class="fw-bold mb-3">
+                    Select Existing Customer
+                </h6>
+
+
+                <div id="customerList"></div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <!-- NIN -->
+
+
+        <div class="section-card d-none"
+             id="nin-section">
+
+
+            <div class="section-header">
+
+                <div class="section-icon">
+                    <i class="bi bi-person-vcard"></i>
+                </div>
+
+
+                <div>
+
+                    <h5>
+                        Identity Verification
+                    </h5>
+
+
+                    <p>
+                        Verify your NIN before continuing.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="row align-items-end">
+
+
+                <div class="col-md-8 mb-3">
+
+                    <label class="form-label">
+                        National Identification Number
+                    </label>
+
+
+                    <input id="ninInput"
+                           maxlength="11"
+                           class="form-control"
+                           placeholder="Enter 11 digit NIN" />
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <button id="btnVerifyNin" class="btn btn-primary w-100">
+
+                        Verify NIN
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div id="ninError"
+                 class="text-danger small d-none"></div>
+
+
+        </div>
+
+
+
+
+
+
+        <!-- DETAILS -->
+
+
+        <div class="section-card d-none"
+             id="details-section">
+
+
+            <div class="section-header">
+
+
+                <div class="section-icon">
+
+                    <i class="bi bi-person"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h5>
+                        Personal Details
+                    </h5>
+
+
+                    <p>
+                        Confirm your information and provide additional details.
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="row">
+
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="form-label">
+                        Full Name
+                    </label>
+
+
+                    <input id="fullName"
+                           class="form-control"
+                           readonly />
+
+                </div>
+
+
+            </div>
+
+
+
+
+            <div class="row">
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+
+                    <input id="email"
+                           class="form-control"
+                           readonly />
+
+                </div>
+
+
+
+                <div class="col-md-6 mb-3">
+
+
+                    <label class="form-label">
+                        Phone Number
+                    </label>
+
+
+                    <input id="phone"
+                           class="form-control"
+                           readonly />
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <!-- NEXT OF KIN -->
+
+
+            <div class="form-subsection">
+
+
+                <h6>
+                    <i class="bi bi-heart"></i>
+                    Next Of Kin
+                </h6>
+
+
+
+                <div class="row">
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Name
+                        </label>
+
+
+                        <input id="nextOfKinName"
+                               class="form-control"
+                               placeholder="Enter full name" />
+
+
+                    </div>
+
+
+
+                    <div class="col-md-6 mb-3">
+
+
+                        <label class="form-label">
+                            Phone Number
+                        </label>
+
+
+                        <input id="nextOfKinPhone"
+                               class="form-control"
+                               placeholder="080xxxxxxxx" />
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <!-- REFERRAL -->
+
+
+            <div class="form-subsection">
+
+
+                <h6>
+                    <i class="bi bi-gift"></i>
+                    Referral
+                </h6>
+
+
+
+                <div class="referral-box">
+
+
+                    <div>
+
+                        <strong>
+                            Were you referred?
+                        </strong>
+
+                        <small>
+                            Select if a CLO referred you.
+                        </small>
+
+
+                    </div>
+
+
+
+                    <div class="form-check form-switch">
+
+                        <input id="isReferral"
+                               class="form-check-input"
+                               type="checkbox" />
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+                <div id="cloWrap"
+                     class="d-none mt-3">
+
+
+                    <label class="form-label">
+                        Select CLO
+                    </label>
+
+
+                    <select id="cloSelect"
+                            class="form-select"
+                            disabled>
+
+                        <option>
+                            -- Select CLO --
+                        </option>
+
+                    </select>
+
+
+
+                    <div id="cloHelp"
+                         class="small text-muted mt-2">
+                    </div>
+
+
+                    <div id="cloError"
+                         class="text-danger small d-none">
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- COVERAGE -->
+
+            <div class="form-subsection">
+
+
+                <h6>
+                    <i class="bi bi-shield-check"></i>
+                    Coverage
+                </h6>
+
+
+
+
+                <div class="coverage-box">
+
+
+                    <div class="unit-control">
+
+
+                        <button id="minusUnit"
+                                class="unit-btn">
+                            −
+                        </button>
+
+
+                        <input id="units"
+                               readonly
+                               value="1" />
+
+
+                        <button id="plusUnit"
+                                class="unit-btn">
+                            +
+                        </button>
+
+
+                    </div>
+
+
+
+                    <small>
+                        ₦1,500 per unit
+                    </small>
+
+
+
+                    <div class="total-box mt-3">
+
+                        Total Premium
+
+                        <strong id="totalPremium">
+                            ₦1,500
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+
+            <button id="btnProceed"
+                    class="btn btn-primary w-100 mt-4">
+
+                Proceed To Invoice
+                <i class="bi bi-arrow-right ms-2"></i>
+
+            </button>
+
+        </div>
+
+
+
+
+    </div>
+     
+</div>
+
+
+<script>
+
+    (function() {
+
+        const unitPrice = 1500;
+
+        let applicationState = {
+            clientCode: null,
+            isExistingClient: false,
+
+            fullName: "",
+            email: "",
+            phone: "",
+
+            nin: "",
+
+            nextOfKinName: "",
+            nextOfKinPhone: "",
+
+            isReferral: false,
+            cloCode: null,
+
+            units: @((ViewBag.Units ?? 1))
+        };
+
+        let cloLoaded = false;
+        let cloLoading = false;
+
+        function normalizeNgPhone(input) {
+            if (!input) return "";
+            return input.trim().replace(/\s+/g, "").replace(/[-()]/g, "");
+        }
+
+        function isValidNgPhone(phone) {
+            return /^0\d{10}$/.test(phone);
+        }
+
+        function updateTotal(){
+
+            $("#units")
+                .val(applicationState.units);
+
+
+            $("#totalPremium")
+                .text(
+                  "₦" +
+                  (applicationState.units * unitPrice)
+                  .toLocaleString()
+                );
+
+        }
+
+        function setCloUiState({ show, loading, errorText }) {
+            if (show) $("#cloWrap").removeClass("d-none");
+            else $("#cloWrap").addClass("d-none");
+
+            if (loading) {
+                $("#cloHelp").text("Loading CLO list...").removeClass("d-none");
+                $("#cloSelect").prop("disabled", true);
+            } else {
+                $("#cloHelp").addClass("d-none");
+                $("#cloSelect").prop("disabled", false);
+            }
+
+            if (errorText) {
+                $("#cloError").text(errorText).removeClass("d-none");
+            } else {
+                $("#cloError").addClass("d-none").text("");
+            }
+        }
+
+        function populateCloDropdown(list) {
+        const $select = $("#cloSelect");
+        $select.empty();
+        $select.append(`<option value="">-- Select CLO --</option>`);
+
+        list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+        for (const item of list) {
+            const code = (item.code ?? "").trim();
+            const name = (item.name ?? "").trim();
+
+            if (!code || !name) continue;
+ 
+            $select.append(`<option value="${code}">${name}</option>`);
+        }
+    }
+
+
+        async function loadCloListOnce() {
+            if (cloLoaded || cloLoading) return;
+
+            cloLoading = true;
+            setCloUiState({ show: true, loading: true, errorText: null });
+
+            try {
+
+                const res = await fetch("@Url.Content("~/GPA/GetClo")", { method: "GET" });
+
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+
+                const text = await res.text();
+                const data = JSON.parse(text);
+
+                console.log("GetClo response:", data);
+
+                const list =
+                    data?.CLO_LIST ??
+                    data?.clo_LIST ??
+                    data?.clO_LIST ?? 
+                    data?.data?.CLO_LIST ??
+                    data?.data?.clo_LIST ??
+                    data?.data?.clO_LIST ??
+                    [];
+
+
+                if (!Array.isArray(list) || list.length === 0) {
+                    console.error("CLO list missing or empty. Full response:", data);
+                    throw new Error("Empty CLO list");
+                }
+
+
+                populateCloDropdown(list);
+                cloLoaded = true;
+                setCloUiState({ show: true, loading: false, errorText: null });
+            } catch (e) {
+                console.error("Failed to load CLO list", e);
+                setCloUiState({
+                    show: true,
+                    loading: false,
+                    errorText: "Unable to load CLO list. Please try again."
+                });
+            } finally {
+                cloLoading = false;
+            }
+        }
+
+        $(document).ready(function () {
+            updateTotal();
+
+        $("#plusUnit").on("click",()=>{
+
+                applicationState.units++;
+
+                updateTotal();
+
+            });
+
+        $("#minusUnit").on("click",()=>{
+
+                if(applicationState.units > 1){
+
+                    applicationState.units--;
+
+                    updateTotal();
+
+                }
+
+            });
+
+        $("#btnLookupCustomer").click(function () {
+
+        const email = $("#lookupEmail").val().trim();
+        const phone = normalizeNgPhone($("#lookupPhone").val());
+
+            applicationState.email = email;
+            applicationState.phone = phone;
+
+        if (!email) {
+            notify("warning", "Enter your email.");
+            $("#lookupEmail").focus();
+            return;
+        }
+
+
+        if (!isValidNgPhone(phone)) {
+            notify("warning", "Enter a valid phone number.");
+            $("#lookupPhone").focus();
+            return;
+        }
+
+
+        $.ajax({
+
+            url: "/GPA/SearchClient",
+
+            type: "GET",
+
+            data: {
+                email: email,
+                phone: phone
+            },
+
+
+            beforeSend() {
+
+                $("#btnLookupCustomer")
+                    .prop("disabled", true)
+                    .text("Searching...");
+
+            },
+
+
+            success(res) {
+
+                updateProgress(2);
+
+
+                if (!res.exists) {
+
+
+        // Hide lookup fields
+        $("#lookupFields")
+            .addClass("d-none");
+
+
+        // Show change customer button
+        $("#btnChangeCustomer")
+            .removeClass("d-none");
+
+
+        // Show NIN first
+        $("#nin-section")
+            .removeClass("d-none")
+            .hide()
+            .fadeIn();
+
+
+        notify(
+            "info",
+            "No existing customer found. Please verify your NIN."
+        );
+
+
+        return;
+    }
+
+
+                renderCustomers(res.clients);
+
+            },
+
+
+            error() {
+
+                notify(
+                    "error",
+                    "Unable to search customer. Please try again."
+                );
+
+            },
+
+
+            complete() {
+
+                $("#btnLookupCustomer")
+                    .prop("disabled", false)
+                    .text("Continue");
+
+            }
+
+        });
+
+    });
+
+        $(document).on("click", ".customer-card", function () {
+
+            const client = $(this).data("client");
+
+
+                applicationState.clientCode = client.clientCode;
+                applicationState.isExistingClient = true;
+
+                applicationState.fullName = client.name;
+                applicationState.email = client.email;
+                applicationState.phone = client.phone;
+
+                $("#fullName").val(applicationState.fullName);
+                $("#email").val(applicationState.email);
+                $("#phone").val(applicationState.phone);
+
+
+                moveToApplicationForm();
+
+        });
+
+        $("#btnChangeCustomer").click(function () {
+
+            // Reset application state
+            applicationState.clientCode = null;
+            applicationState.isExistingClient = false;
+
+            applicationState.fullName = "";
+            applicationState.email = "";
+            applicationState.phone = "";
+            applicationState.nin = "";
+
+            applicationState.nextOfKinName = "";
+            applicationState.nextOfKinPhone = "";
+
+            applicationState.isReferral = false;
+            applicationState.cloCode = null;
+
+            applicationState.units = @((ViewBag.Units ?? 1));
+
+            // Reset lookup fields
+            $("#lookupEmail").val("");
+            $("#lookupPhone").val("");
+
+            // Reset customer details
+            $("#fullName").val("");
+            $("#email").val("");
+            $("#phone").val("");
+            $("#ninInput").val("");
+
+            // Reset next of kin
+            $("#nextOfKinName").val("");
+            $("#nextOfKinPhone").val("");
+
+            // Reset referral
+            $("#isReferral").prop("checked", false);
+            $("#cloWrap").addClass("d-none");
+            $("#cloSelect").val("");
+
+            // Reset coverage
+            updateTotal();
+
+            // Clear customer results
+            $("#customerList").empty();
+            $("#existingCustomers").addClass("d-none");
+
+            // Show lookup section again
+            $("#lookupFields").removeClass("d-none");
+
+            // Hide Change Customer button
+            $(this).addClass("d-none");
+
+            // Hide other sections
+            $("#details-section").addClass("d-none");
+            $("#nin-section").addClass("d-none");
+        });
+
+        $("#isReferral").change(function () {
+
+            applicationState.isReferral = $(this).is(":checked");
+
+            if (applicationState.isReferral) {
+
+                $("#cloWrap").removeClass("d-none");
+
+                loadCloListOnce();
+            }
+            else {
+
+                applicationState.cloCode = null;
+
+                $("#cloWrap").addClass("d-none");
+
+                $("#cloSelect").val("");
+            }
+
+        });
+
+        $("#cloSelect").change(function () {
+
+            applicationState.cloCode = $(this).val();
+
+        });
+
+        $("#nextOfKinName").on("input", function () {
+            applicationState.nextOfKinName = $(this).val().trim();
+        });
+
+        $("#nextOfKinPhone").on("input", function () {
+            applicationState.nextOfKinPhone = normalizeNgPhone($(this).val());
+        });
+
+        function renderCustomers(customers){
+
+            let html="";
+
+
+            customers.forEach(client=>{
+
+
+                html += `
+
+                <div class="customer-card"
+                     data-client='${JSON.stringify(client)}'>
+
+
+                    <div class="d-flex justify-content-between">
+
+
+                        <div>
+
+                            <h6 class="mb-1">
+                                ${client.name}
+                            </h6>
+
+
+                            <small class="text-muted">
+
+                                Client Code:
+                                ${client.clientCode}
+
+                            </small>
+
+
+                        </div>
+
+
+                        <i class="bi bi-chevron-right fs-4"></i>
+
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted">
+                                Email
+                            </small>
+
+                            <div>
+                                ${client.email}
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted">
+                                Phone
+                            </small>
+
+                            <div>
+                                ${client.phone}
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+                `;
+
+
+            });
+
+
+            $("#customerList").html(html);
+
+
+            $("#existingCustomers")
+                .removeClass("d-none")
+                .fadeIn();
+
+        }
+
+        function moveToApplicationForm(){
+
+        updateProgress(3);
+
+        // hide lookup inputs
+        $("#lookupFields")
+            .addClass("d-none");
+
+        // hide NIN verification section
+        $("#nin-section")
+            .addClass("d-none");
+
+        // show back button
+        $("#btnChangeCustomer")
+            .removeClass("d-none");
+
+        // hide customer results
+        $("#existingCustomers")
+            .addClass("d-none");
+
+        // show application details form
+        $("#details-section")
+            .removeClass("d-none")
+            .hide()
+            .fadeIn();
+
+    }
+
+        $("#btnProceed").click(function () {
+
+
+            updateProgress(4);
+
+
+            if (!applicationState.nextOfKinName) {
+
+                notify(
+                    "warning",
+                    "Enter your next of kin's name."
+                );
+
+                $("#nextOfKinName").focus();
+
+                return;
+            }
+
+
+
+            if (!isValidNgPhone(applicationState.nextOfKinPhone)) {
+
+                notify(
+                    "warning",
+                    "Enter a valid next of kin phone number."
+                );
+
+                $("#nextOfKinPhone").focus();
+
+                return;
+            }
+
+
+
+            if (applicationState.isReferral && !applicationState.cloCode) {
+
+                notify(
+                    "warning",
+                    "Please select a CLO."
+                );
+
+                $("#cloSelect").focus();
+
+                return;
+            }
+
+
+
+            const request = {
+
+
+                // Client Identifier
+                clientCode:
+                    applicationState.clientCode,
+
+
+                // Customer display information
+                fullName:
+                    applicationState.fullName,
+
+
+                email:
+                    applicationState.email,
+
+
+                phone:
+                    applicationState.phone,
+
+
+
+                // Coverage
+                units:
+                    applicationState.units,
+
+
+
+                // Next of Kin
+                nextOfKinName:
+                    applicationState.nextOfKinName,
+
+
+                nextOfKinPhone:
+                    applicationState.nextOfKinPhone,
+
+
+
+                // Referral
+                isReferral:
+                    applicationState.isReferral,
+
+
+                cloCode:
+                    applicationState.cloCode,
+
+
+                cloName:
+                    $("#cloSelect option:selected").text()
+
+            };
+
+
+
+            console.log("Invoice Request:", request);
+
+
+
+            $.ajax({
+
+                url:"/Home/SetIndividualSession",
+
+                type:"POST",
+
+                contentType:"application/json",
+
+                data:
+                    JSON.stringify(request),
+
+
+                success:function(res){
+
+
+                    if(res.success){
+
+
+                        window.location.href =
+                            "/Home/Invoice";
+
+
+                    }
+
+
+                },
+
+
+                error:function(){
+
+
+                    notify(
+                        "error",
+                        "Unable to prepare invoice. Contact Unitrust Support."
+                    );
+
+
+                }
+
+
+            });
+
+
+        });
+
+        $("#btnVerifyNin").click(function () {
+
+            const request = {
+            nin: $("#ninInput").val().trim(),
+            email: $("#lookupEmail").val().trim(),
+            phone: normalizeNgPhone($("#lookupPhone").val())
+        };
+
+            if (request.nin.length !== 11) {
+                notify("warning", "Enter a valid NIN");
+                return;
+            }
+
+            $.ajax({
+
+            url: "/GPA/GetUserByNIN",
+
+            type: "POST",
+
+            contentType: "application/json",
+
+            data: JSON.stringify(request),
+
+            beforeSend: function () {
+
+            $("#btnVerifyNin")
+                .prop("disabled", true)
+                .html(`
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Verifying...
+                `);
+
+             },
+
+            success: function (res) {
+
+                // Populate the UI only
+
+                $("#fullName").val(res.fullName);
+                $("#email").val(res.email);
+                $("#phone").val(res.phone);
+
+
+                initializeNewCustomer(res);
+
+                },
+            error: function(xhr) {
+
+                    let message = "NIN verification failed";
+
+                    try {
+
+                        const response = JSON.parse(xhr.responseText);
+
+                        if(response.message)
+                        {
+                            message = response.message;
+                        }
+
+                    }
+                    catch(e)
+                    {
+                        message = xhr.responseText || message;
+                    }
+
+
+                    notify(
+                        "error",
+                        message
+                    );
+
+    },
+            complete: function () {
+
+                $("#btnVerifyNin")
+                .prop("disabled", false)
+                .html("Verify NIN");
+
+            }
+                
+
+            });
+
+
+
+        });
+
+        function updateProgress(step) {
+
+        $(".progress-step")
+            .removeClass("active completed");
+
+
+        $(".progress-line")
+            .removeClass("active");
+
+
+        if(step >= 1){
+
+            $("#stepCustomer")
+                .addClass("completed");
+
+        }
+
+
+        if(step >= 2){
+
+            $("#stepIdentity")
+                .addClass("active");
+
+            $("#stepCustomer")
+                .addClass("completed");
+
+            $(".progress-line")
+                .eq(0)
+                .addClass("active");
+
+        }
+
+
+        if(step >= 3){
+
+            $("#stepIdentity")
+                .removeClass("active")
+                .addClass("completed");
+
+
+            $("#stepDetails")
+                .addClass("active");
+
+
+            $(".progress-line")
+                .eq(1)
+                .addClass("active");
+
+        }
+
+
+        if(step >= 4){
+
+            $("#stepDetails")
+                .removeClass("active")
+                .addClass("completed");
+
+
+            $("#stepCoverage")
+                .addClass("active");
+
+
+            $(".progress-line")
+                .eq(2)
+                .addClass("active");
+
+        }
+
+
+    }
+
+        function initializeNewCustomer(customer) {
+
+            applicationState.clientCode = customer.clientCode;
+            applicationState.isExistingClient = false;
+
+            applicationState.fullName = customer.fullName;
+            applicationState.email = customer.email;
+            applicationState.phone = customer.phone;
+
+            moveToApplicationForm();
+        }
+
+        function startApplication(client, isExistingClient) {
+
+        applicationState.clientCode = client.clientCode;
+        applicationState.isExistingClient = isExistingClient;
+
+        applicationState.fullName = client.fullName ?? client.name;
+        applicationState.email = client.email;
+        applicationState.phone = client.phone;
+        applicationState.nin = client.nin ?? "";
+
+        $("#fullName").val(applicationState.fullName);
+        $("#email").val(applicationState.email);
+        $("#phone").val(applicationState.phone);
+
+        moveToApplicationForm();
+    }
+
+    });
+
+
+
+
+    })();
+
+
+
+</script>

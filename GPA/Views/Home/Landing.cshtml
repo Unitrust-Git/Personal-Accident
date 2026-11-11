@@ -1,0 +1,222 @@
+﻿@{
+    ViewBag.Title = "Landing";
+}
+
+
+<div class="landing-page">
+
+    <header class="top-header">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="d-flex align-items-center">
+                    <img src="~/img/New Unitrust Logo Blue 1.png"
+                         alt="Unitrust Logo"
+                         class="brand-logo" />
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+@*                     <a href="/Insurance/BuyNow" class="btn btn-light rounded-pill px-4 fw-semibold">
+                        Buy Now
+                    </a> *@
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-product">
+        <div class="container-fluid px-4 px-lg-5 h-100">
+            <div class="row align-items-center min-vh-hero gx-4">
+
+                <div class="col-lg-6 hero-left">
+                    <span class="hero-badge">Affordable Personal Cover</span>
+
+                    <h1 class="hero-title mt-3 mb-4">
+                        Personal Accident <br />
+                        Insurance
+                    </h1>
+
+                    <p class="hero-text">
+                        Protect yourself against life’s unexpected events with a simple,
+                        affordable personal accident plan designed to provide quick financial support.
+                    </p>
+
+                    <p class="hero-text">
+                        Get coverage for medical expenses, permanent disability,
+                        accidental death, and funeral support.
+                    </p>
+
+                    <div class="d-flex flex-column flex-sm-row gap-3 mt-4">
+                        <a href="/Home/Index" class="btn btn-light btn-lg rounded-pill px-5 fw-semibold">
+                            Buy Now
+                        </a>
+
+
+                        <button type="button"
+                                class="btn btn-outline-light btn-lg rounded-pill px-5"
+                                data-bs-toggle="modal"
+                                data-bs-target="#quoteModal">
+                            Get Quote
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 hero-right">
+                    <div class="product-card">
+
+
+                        <div class="card-header-visual">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-shield-heart"></i>
+                            </div>
+                            <div class="card-title-text">Personal Accident Cover</div>
+                        </div>
+
+                        <div class="p-4 p-lg-4">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h3 class="price mb-0">₦1,500</h3>
+                                <span class="package-tag">Per Unit</span>
+                            </div>
+
+                            <a href="/Home/Index" class="btn btn-primary w-100 btn-lg rounded-pill mb-4">
+                                Buy Now
+                            </a>
+
+                            <ul class="benefits">
+                                <li>
+                                    <i class="fa-solid fa-hospital text-primary me-2"></i>
+                                    <span>Medical Benefit: ₦100,000 per Unit</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-wheelchair text-primary me-2"></i>
+                                    <span>Permanent Disability: ₦1,000,000 per Unit</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-shield-heart text-primary me-2"></i>
+                                    <span>Accidental Death: ₦1,000,000 per Unit</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+<div class="modal fade" id="quoteModal" tabindex="-1" aria-labelledby="quoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content quote-modal">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-primary" id="quoteModalLabel">Get Quote</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body pt-2">
+                <p class="text-muted mb-3">
+                    Select the number of units you want and see your total premium instantly.
+                </p>
+
+                <div class="quote-price-box mb-4">
+                    <div class="small text-muted">Price per unit</div>
+                    <div class="fw-bold fs-5">₦1,500</div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center gap-3 mb-4">
+                    <button type="button" class="btn btn-outline-primary quote-unit-btn" id="decreaseUnit">−</button>
+
+                    <input type="text"
+                           id="quoteUnits"
+                           class="form-control text-center quote-unit-input"
+                           value="1"
+                           readonly />
+
+                    <button type="button" class="btn btn-outline-primary quote-unit-btn" id="increaseUnit">+</button>
+                </div>
+
+                <div class="quote-total-box text-center mb-4">
+                    <div class="small text-muted">Total Premium</div>
+                    <div class="fw-bold fs-4 text-primary" id="quoteTotal">₦1,500</div>
+                </div>
+
+                <div class="quote-benefits-box mb-4">
+                    <div class="fw-semibold mb-3">Coverage Benefits</div>
+
+                    <ul class="quote-benefits-list">
+                        <li class="d-flex justify-content-between gap-3">
+                            <span>Medical Benefit</span>
+                            <strong id="quoteMedicalBenefit">₦100,000</strong>
+                        </li>
+                        <li class="d-flex justify-content-between gap-3">
+                            <span>Permanent Disability</span>
+                            <strong id="quotePermanentDisability">₦1,000,000</strong>
+                        </li>
+                        <li class="d-flex justify-content-between gap-3">
+                            <span>Accidental Death</span>
+                            <strong id="quoteAccidentalDeath">₦1,000,000</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="/Home/Index" id="buyInsuranceBtn" class="btn btn-primary w-100 btn-lg rounded-pill">
+                    Buy Insurance
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        (function () {
+            const unitPrice = 1500;
+            const medicalPerUnit = 100000;
+            const disabilityPerUnit = 1000000;
+            const deathPerUnit = 1000000;
+
+            let units = 1;
+
+            const unitsInput = document.getElementById("quoteUnits");
+            const totalDisplay = document.getElementById("quoteTotal");
+            const increaseBtn = document.getElementById("increaseUnit");
+            const decreaseBtn = document.getElementById("decreaseUnit");
+            const buyBtn = document.getElementById("buyInsuranceBtn");
+
+            const medicalBenefitEl = document.getElementById("quoteMedicalBenefit");
+            const disabilityBenefitEl = document.getElementById("quotePermanentDisability");
+            const deathBenefitEl = document.getElementById("quoteAccidentalDeath");
+
+            function formatNaira(value) {
+                return "₦" + value.toLocaleString();
+            }
+
+            function updateQuote() {
+                unitsInput.value = units;
+                totalDisplay.textContent = formatNaira(units * unitPrice);
+
+                medicalBenefitEl.textContent = formatNaira(units * medicalPerUnit);
+                disabilityBenefitEl.textContent = formatNaira(units * disabilityPerUnit);
+                deathBenefitEl.textContent = formatNaira(units * deathPerUnit);
+
+                buyBtn.href = "/Home/Index?units=" + units;
+            }
+
+            increaseBtn.addEventListener("click", function () {
+                units++;
+                updateQuote();
+            });
+
+            decreaseBtn.addEventListener("click", function () {
+                if (units > 1) {
+                    units--;
+                    updateQuote();
+                }
+            });
+
+            updateQuote();
+        })();
+    </script>
+}

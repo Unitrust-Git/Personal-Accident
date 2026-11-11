@@ -1,0 +1,47 @@
+﻿@model GPADashboard.Models.IndividualPoliciesIndexVm
+
+<h2>Individual Policies</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Policy Number</th>
+            <th>Units</th>
+            <th>Expected Sum Assured</th>
+            <th>Actual Sum Assured</th>
+            <th>Insured</th>
+            <th>Status</th>
+            <th>Remark</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Reconciliation)
+        {
+            var badgeClass = item.Status switch
+            {
+                "VALID" => "bg-success",
+                "MISMATCH" => "bg-danger",
+                "NOT_FOUND_IN_UNIWARE" => "bg-warning text-dark",
+                "ERROR" => "bg-secondary",
+                _ => "bg-light text-dark"
+            };
+
+            <tr>
+                <td>@item.PolicyNumber</td>
+                <td>@item.Units</td>
+                <td>@item.ExpectedSumAssured.ToString("N0")</td>
+                <td>@item.ActualSumAssured.ToString()</td>
+                <td>@item.InsuredName</td>
+
+                <td>
+                    <span class="badge @badgeClass">
+                        @item.Status
+                    </span>
+                </td>
+
+                <td>@item.Remark</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,322 @@
+﻿@* @{
+
+    ViewBag.Title = "Select Type";
+
+}
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+<div class="form-background">
+
+    <div class="container form-container text-center">
+
+        <div class="mb-4">
+            <img src="~/img/New Unitrust Logo Blue 1.png"
+                 alt="Unitrust Logo"
+                 class="portal-logo" />
+        </div>
+
+        <div class="mb-4 fw-semibold text-white">
+            <h3>Personal Accident Portal</h3>
+        </div>
+
+        <div class="mt-4">
+            @await Html.PartialAsync("Forms/_individualForm")
+        </div>
+
+    </div>
+
+</div> *@
+
+
+
+@* <div class="form-background">
+
+    <div class="container form-container">
+
+        <div class="text-center mb-5">
+
+            <img src="~/img/New Unitrust Logo Blue 1.png"
+                 class="portal-logo mb-4" />
+
+            <h2 class="text-white fw-bold">
+                Personal Accident Portal
+            </h2>
+
+            <p class="text-white-50">
+                Choose the type of application you want to continue with.
+            </p>
+
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-lg-5">
+
+                <a asp-action="Individual"
+                   class="text-decoration-none">
+
+                    <div class="card selection-card h-100 border-0">
+
+                        <div class="card-body p-5 text-center">
+
+                            <div class="application-icon mx-auto mb-4">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
+
+                            <h4>Individual</h4>
+
+                            <p class="text-muted">
+                                Purchase cover for yourself or your family.
+                            </p>
+
+                            <span class="btn btn-primary mt-3">
+                                Continue
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-5">
+
+                <a asp-action="Corporate"
+                   class="text-decoration-none">
+
+                    <div class="card selection-card h-100 border-0">
+
+                        <div class="card-body p-5 text-center">
+
+                            <div class="application-icon mx-auto mb-4">
+                                <i class="bi bi-buildings-fill"></i>
+                            </div>
+
+                            <h4>Corporate</h4>
+
+                            <p class="text-muted">
+                                Purchase accident cover for employees or members.
+                            </p>
+
+                            <span class="btn btn-primary mt-3">
+                                Continue
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div> *@
+
+<div class="form-background">
+
+    <div class="container form-container">
+
+        <!-- Selection Section -->
+        <div id="applicationSelection">
+
+            <div class="text-center mb-5">
+
+                <img src="~/img/New Unitrust Logo Blue 1.png"
+                     class="portal-logo mb-4" />
+
+                <h2 class="text-white fw-bold">
+                    Personal Accident Portal
+                </h2>
+
+                <p class="text-white-50">
+                    Choose the type of application you want to continue with.
+                </p>
+
+            </div>
+
+            <div class="row g-4 justify-content-center">
+
+                <!-- Individual -->
+                <div class="col-lg-5">
+
+                    <a href="javascript:void(0);"
+                       class="text-decoration-none application-option"
+                       data-form="individual">
+
+                        <div class="card selection-card h-100 border-0">
+
+                            <div class="card-body p-5 text-center">
+
+                                <div class="application-icon mx-auto mb-4">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+
+                                <h4>Individual</h4>
+
+                                <p class="text-muted">
+                                    Purchase cover for yourself or your family.
+                                </p>
+
+                                <span class="btn btn-primary mt-3">
+                                    Continue
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+                <!-- Corporate -->
+                <div class="col-lg-5">
+
+                    <a href="javascript:void(0);"
+                       class="text-decoration-none application-option"
+                       data-form="corporate">
+
+                        <div class="card selection-card h-100 border-0">
+
+                            <div class="card-body p-5 text-center">
+
+                                <div class="application-icon mx-auto mb-4">
+                                    <i class="bi bi-buildings-fill"></i>
+                                </div>
+
+                                <h4>Corporate</h4>
+
+                                <p class="text-muted">
+                                    Purchase accident cover for employees or members.
+                                </p>
+
+                                <span class="btn btn-primary mt-3">
+                                    Continue
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Form Section -->
+        <div id="applicationFormSection" style="display: none;">
+
+            <!-- Back Button -->
+            <div class="mb-4">
+
+                <button type="button"
+                        id="backToSelection"
+                        class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Back
+                </button>
+
+            </div>
+
+            <!-- Form will be loaded here -->
+            <div id="applicationFormContainer"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $(".application-option").on("click", function () {
+
+            var formType = $(this).data("form");
+
+            var url = formType === "individual"
+                ? '@Url.Action("IndividualForm", "Home")'
+                : '@Url.Action("CorporateForm", "Home")';
+
+
+            // Show loading
+            $("#applicationFormContainer").html(`
+                <div class="text-center text-white py-5">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-3">Loading form...</p>
+                </div>
+            `);
+
+
+            // Hide selection
+            $("#applicationSelection").hide();
+
+
+            // Show form section
+            $("#applicationFormSection").show();
+
+
+            // Load form
+            $.get(url, function (result) {
+
+                $("#applicationFormContainer").html(result);
+
+                // Scroll to top of form
+                $("html, body").animate({
+                    scrollTop: $("#applicationFormSection").offset().top - 30
+                }, 500);
+
+            }).fail(function () {
+
+                $("#applicationFormContainer").html(`
+                    <div class="alert alert-danger">
+                        Unable to load the application form.
+                        Please try again.
+                    </div>
+                `);
+
+            });
+
+        });
+
+
+        // BACK BUTTON
+        $("#backToSelection").on("click", function () {
+
+            // Remove current form
+            $("#applicationFormContainer").empty();
+
+
+            // Hide form
+            $("#applicationFormSection").hide();
+
+
+            // Show selection options
+            $("#applicationSelection").show();
+
+
+            // Scroll back to selection
+            $("html, body").animate({
+                scrollTop: $("#applicationSelection").offset().top - 30
+            }, 500);
+
+        });
+
+    });
+
+</script>
